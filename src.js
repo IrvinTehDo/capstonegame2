@@ -3,14 +3,17 @@ const ctx = c.getContext("2d");
 const CENTER_X = 100;
 const CENTER_Y = 100;
 const elements = [];
+const circleColors = ['red', 'green', 'blue', 'cyan']
 var selected = null;
 
+// function to get circle x,y, and radius
 function elem(x, y, radius) {
     this.x = x;
     this.y = y;
     this.radius = radius;
 }
 
+// function for clicking
 
 function isClicked (c1, c2) {
     var a = c1.r + c2.r,
@@ -21,6 +24,7 @@ function isClicked (c1, c2) {
     else return false;
 }
 
+// function to draw circles
 const drawOvalShape = (ctx, center_x, center_y, radius, color) =>{
     ctx.beginPath();
     ctx.fillStyle = color;
@@ -28,6 +32,8 @@ const drawOvalShape = (ctx, center_x, center_y, radius, color) =>{
     ctx.fill();
     ctx.closePath();
 };
+
+// function to draw rectangle??
 
 const drawRect = (ctx, x, y, width, height, color) => {
     ctx.beginPath();
@@ -42,12 +48,15 @@ const Update = () => {
     
 };
 
+// draw it
+
 const Draw = () => {
     ctx.clearRect(0,0,1000,1000);
     
-    for(i = 1; i < 10; i++){
-        for(j = 1; j < 7; j++){
-            drawOvalShape(ctx, CENTER_X * i, CENTER_Y * j, 25, 0);
+    for(i = 1; i < 10; i++){  // 9 circles columns
+        for(j = 1; j < 7; j++){ // 7 rows
+            var cColor = circleColors[Math.floor(Math.random() * circleColors.length)];
+            drawOvalShape(ctx, CENTER_X * i, CENTER_Y * j, 25, cColor);
             newel = new elem(CENTER_X * i, CENTER_Y * j, 25)
             elements.push(newel);
         }
@@ -59,9 +68,10 @@ const Draw = () => {
     })
 }
 
+// function to connect line
 function connect (e) {
     var i = 0, col = null;
-    for (; i < elements.length; i++) {
+    for (i = 0; i < elements.length; i++) {
         var element = elements[i],
             c1 = {x: element.x, y: element.y, r: 25},
             c2 = {x: e.clientX, y: e.clientY, r: 25};
