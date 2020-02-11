@@ -4,6 +4,7 @@ const CENTER_X = 100;
 const CENTER_Y = 100;
 const grid = [];
 var lineSession = [];
+var ignoreList = [];
 const circleColors = ['red', 'green', 'blue', 'cyan'];;
 var selected = null;
 var mouseDown = false;
@@ -101,29 +102,35 @@ c.addEventListener('mousedown', function (e){
 c.addEventListener('mouseup', function (e){
     mouseDown = false;
     lineSession = [];
+    ignoreList = [];
     CheckScore();
 });
 
 const MouseInCircle = (circle, mouse) => {
-    const distX = mouse.x - circle.x;
-    const distY = mouse.y - circle.y;
-    const dist = Math.sqrt((distX*distX) + (distY*distY));
-    if(dist <= circle.radius){
-        return true;
-    }
-    return false;
+    return Math.sqrt((circle.x - mouse.x)*(circle.x - mouse.x) + (circle.y - mouse.y) * (circle.y - mouse.y)) < circle.radius;
 };
+
 
 c.addEventListener('mousemove', function (e){
     if(mouseDown){
         const mouse = {x: e.clientX, y: e.clientY};
-        for(let i = 0; i < grid.length; i++){
-            if(MouseInCircle(grid[i], mouse)){
-                lineSession.push(grid[i]);
-            } else {
 
-            };
+        for(let i = 0; i < grid.length; i++){
+            for(let z = 0; z < ignoreList.length; z++){
+                if(ignoreList[z] == i){
+                    console.log(z);
+                    console.log('ignore list');
+                    return;
+                }
+            }
+            if(MouseInCircle(grid[i], mouse)){
+                console.log('pushing');
+                lineSession.push(grid[i]);
+                ignoreList.push(i);
+                return;
+            } 
         }
+        console.log('failed');
     }
 });
 
