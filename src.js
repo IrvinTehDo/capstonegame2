@@ -134,6 +134,13 @@ c.addEventListener('mousemove', function (e){
 
             // If it's a circle we're not over, add it to the line session and return.
             if(MouseInCircle(grid[i], mouse)){
+                if (ignoreList.length > 0) {
+                    // Check if same color.
+                    if(grid[i].color != grid[ignoreList[ignoreList.length - 1]].color){
+                        return;
+                    }
+                }
+
                 lineSession.push(grid[i]);
                 ignoreList.push(i);
                 return;
