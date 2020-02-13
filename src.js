@@ -118,19 +118,17 @@ c.addEventListener('mousemove', function (e){
         for(let i = 0; i < grid.length; i++){
             for(let z = 0; z < ignoreList.length; z++){
                 if(ignoreList[z] == i){
-                    console.log(z);
-                    console.log('ignore list');
-                    return;
+                    if(MouseInCircle(grid[i], mouse)){
+                        return;
+                    }
                 }
             }
             if(MouseInCircle(grid[i], mouse)){
-                console.log('pushing');
                 lineSession.push(grid[i]);
                 ignoreList.push(i);
                 return;
             } 
         }
-        console.log('failed');
     }
 });
 
