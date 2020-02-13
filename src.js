@@ -136,8 +136,14 @@ c.addEventListener('mousemove', function (e){
             if(MouseInCircle(grid[i], mouse)){
                 if (ignoreList.length > 0) {
                     // Check if same color.
+                    // Then Check if it's horizontal or vertical. 
                     if(grid[i].color != grid[ignoreList[ignoreList.length - 1]].color){
                         return;
+                    } else if(ignoreList[ignoreList.length -1] + 6 != i &&
+                        ignoreList[ignoreList.length -1] - 6 != i &&
+                        ignoreList[ignoreList.length -1] + 1 != i &&
+                        ignoreList[ignoreList.length -1] - 1 != i) {
+                            return;
                     }
                 }
 
