@@ -115,7 +115,15 @@ c.addEventListener('mousemove', function (e){
     if(mouseDown){
         const mouse = {x: e.clientX, y: e.clientY};
 
+        // Limit selectable dots to 3
+        if(ignoreList.length >= 3){
+            return;
+        }
+
+        // Check if mouse is over grid.
         for(let i = 0; i < grid.length; i++){
+
+            //Iterate through our ignore list aka circles we've already hovered over. If we are on one, return.
             for(let z = 0; z < ignoreList.length; z++){
                 if(ignoreList[z] == i){
                     if(MouseInCircle(grid[i], mouse)){
@@ -123,6 +131,8 @@ c.addEventListener('mousemove', function (e){
                     }
                 }
             }
+
+            // If it's a circle we're not over, add it to the line session and return.
             if(MouseInCircle(grid[i], mouse)){
                 lineSession.push(grid[i]);
                 ignoreList.push(i);
