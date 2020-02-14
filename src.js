@@ -119,6 +119,10 @@ c.addEventListener('mousemove', function (e){
         if(ignoreList.length >= 3){
             return;
         }
+        // for oxygen molecules
+        else if (ignoreList.length >=2 && (grid.color || grid[ignoreList[ignoreList.length - 1]].color == 'blue')){
+            return;
+        }
 
         // Check if mouse is over grid.
         for(let i = 0; i < grid.length; i++){
@@ -148,7 +152,7 @@ c.addEventListener('mousemove', function (e){
                 }
 
                 lineSession.push(grid[i]);
-                ignoreList.push(i);
+                ignoreList.push(i); // selected the three circles
                 return;
             } 
         }
