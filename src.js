@@ -87,7 +87,7 @@ function drawLine (previous, element) {
 
 
 const CheckScore = () => {
-    if(ignoreList.length == 3){
+    if(ignoreList.length == 3 || (ignoreList.length === 2 && grid[ignoreList[ignoreList.length - 1]].color === 'blue')){
         for(let i = 0; i < ignoreList.length; i++){
             const prevX = grid[ignoreList[i]].x;
             const prevY = grid[ignoreList[i]].y;
