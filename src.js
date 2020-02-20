@@ -87,7 +87,14 @@ function drawLine (previous, element) {
 
 
 const CheckScore = () => {
-    
+    if(ignoreList.length == 3){
+        for(let i = 0; i < ignoreList.length; i++){
+            const prevX = grid[ignoreList[i]].x;
+            const prevY = grid[ignoreList[i]].y;
+            var color = circleColors[Math.floor(Math.random() * circleColors.length)];
+            grid[ignoreList[i]] = new elem(prevX, prevY, 25, color);
+        }
+    }
 };
 
 window.addEventListener("keypress", (e) => {
@@ -100,10 +107,10 @@ c.addEventListener('mousedown', function (e){
 });
 
 c.addEventListener('mouseup', function (e){
+    CheckScore();
     mouseDown = false;
     lineSession = [];
     ignoreList = [];
-    CheckScore();
 });
 
 const MouseInCircle = (circle, mouse) => {
