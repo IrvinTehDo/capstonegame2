@@ -5,9 +5,28 @@ const CENTER_Y = 100;
 const grid = [];
 var lineSession = [];
 var ignoreList = [];
-const circleColors = ['red', 'green', 'blue', 'cyan'];;
+const circleColors = {
+    'red': 20,
+    'blue': 40,
+    'green': 40,
+};
 var selected = null;
 var mouseDown = false;
+
+// function for weighted colors
+// https://stackoverflow.com/questions/43566019/how-to-choose-a-weighted-random-array-element-in-javascript
+function getColor(input) {
+    var array = []; // Just Checking...
+    for(var circleColors in input) {
+        if ( input.hasOwnProperty(circleColors) ) { // Safety
+            for( var i=0; i<input[circleColors]; i++ ) {
+                array.push(circleColors);
+            }
+        }
+    }
+    return array[Math.floor(Math.random() * array.length)];
+};
+
 
 // function to get circle x,y, and radius
 function elem(x, y, radius, color) {
@@ -38,7 +57,7 @@ const drawRect = (ctx, x, y, width, height, color) => {
 const GenerateGrid = () => {
     for(i = 1; i < 10; i++){  // 9 circles columns
         for(j = 1; j < 7; j++){ // 7 rows
-            var color = circleColors[Math.floor(Math.random() * circleColors.length)];
+            var color = getColor(circleColors);
             const newEl = new elem(CENTER_X * i, CENTER_Y * j, 25, color);
             grid.push(newEl);
         }
@@ -87,11 +106,11 @@ function drawLine (previous, element) {
 
 
 const CheckScore = () => {
-    if(ignoreList.length == 3 || (ignoreList.length === 2 && grid[ignoreList[ignoreList.length - 1]].color === 'blue')){
+    if(ignoreList.length == 3 || (ignoreList.length === 2 && grid[ignoreList[ignoreList.length - 1]].color === 'blue') ||(ignoreList.length === 2 && grid[ignoreList[ignoreList.length - 1]].color === 'green')){
         for(let i = 0; i < ignoreList.length; i++){
             const prevX = grid[ignoreList[i]].x;
             const prevY = grid[ignoreList[i]].y;
-            var color = circleColors[Math.floor(Math.random() * circleColors.length)];
+            var color = getColor(circleColors);
             grid[ignoreList[i]] = new elem(prevX, prevY, 25, color);
         }
     }
@@ -126,8 +145,8 @@ c.addEventListener('mousemove', function (e){
         if(ignoreList.length >= 3){
             return;
         }
-        // for oxygen molecules
-        else if (ignoreList.length >=2 && (grid.color || grid[ignoreList[ignoreList.length - 1]].color == 'blue')){
+        // for oxygen & nitrogen molecules
+        else if (ignoreList.length >=2 && ((grid.color || grid[ignoreList[ignoreList.length-1]].color == 'green' )|| (grid.color || grid[ignoreList[ignoreList.length - 1]].color == 'blue'))){
             return;
         }
 
