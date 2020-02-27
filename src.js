@@ -106,7 +106,8 @@ function drawLine (previous, element) {
 
 
 const CheckScore = () => {
-    if(ignoreList.length == 3 || (ignoreList.length === 2 && grid[ignoreList[ignoreList.length - 1]].color === 'blue') ||(ignoreList.length === 2 && grid[ignoreList[ignoreList.length - 1]].color === 'green')){
+    if(ignoreList.length == 3 || (ignoreList.length === 2 && grid[ignoreList[ignoreList.length - 1]].color === 'blue') ||(ignoreList.length === 2 && grid[ignoreList[ignoreList.length - 1]].color === 'green')
+    ){
         for(let i = 0; i < ignoreList.length; i++){
             const prevX = grid[ignoreList[i]].x;
             const prevY = grid[ignoreList[i]].y;
@@ -142,9 +143,11 @@ c.addEventListener('mousemove', function (e){
         const mouse = {x: e.clientX, y: e.clientY};
 
         // Limit selectable dots to 3
-        // if(ignoreList.length >= 3 && grid.color != 'red'){
-        //     return;
-        // }
+        if(ignoreList.length >= 2 && grid.color != 'red'){
+            return;
+        }
+        
+        if( (ignoreList.length == 1 && grid.color == 'blue') )
 
         // for oxygen & nitrogen molecules
         if (ignoreList.length >=2 && ((grid.color || grid[ignoreList[ignoreList.length-1]].color == 'green' )|| (grid.color || grid[ignoreList[ignoreList.length - 1]].color == 'blue'))){
