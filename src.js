@@ -147,7 +147,6 @@ c.addEventListener('mousemove', function (e){
             return;
         }
         
-        if( (ignoreList.length == 1 && grid.color == 'blue') )
 
         // for oxygen & nitrogen molecules
         if (ignoreList.length >=2 && (grid[ignoreList[1]].color != 'red' && grid[ignoreList[0]] != 'blue')){
@@ -175,9 +174,9 @@ c.addEventListener('mousemove', function (e){
 
                     if(grid[i].color != grid[ignoreList[ignoreList.length - 1]].color && grid[ignoreList[0]].color != 'blue'){
                         return;
-                    } else if(ignoreList.length == 1 && grid[ignoreList[0]].color == 'blue' && grid[i].color != 'red'){
+                    } else if(ignoreList.length == 2 && grid[ignoreList[0]].color == 'blue' && grid[i].color != 'red'){
                         return;
-                    } else if(ignoreList.length == 2 && grid[ignoreList[0]].color == 'blue' && grid[ignoreList[1]].color == 'red' && grid[i].color != 'blue'){
+                    } else if(ignoreList.length == 3 && grid[ignoreList[0]].color == 'blue' && grid[ignoreList[1]].color == 'red' && grid[ignoreList[ignoreList.length - 1]].color != 'blue'){
                         return;
                     }
 
@@ -195,6 +194,7 @@ c.addEventListener('mousemove', function (e){
 
                 lineSession.push(grid[i]);
                 ignoreList.push(i); // selected the three circles
+                console.log(ignoreList)
                 return;
             } 
         }
