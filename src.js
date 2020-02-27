@@ -146,6 +146,14 @@ c.addEventListener('mousemove', function (e){
         if(ignoreList.length >= 2 && grid.color != 'red'){
             return;
         }
+ 
+        // if( (grid.color != grid[ignoreList[1]].color) && grid.color == 'blue'){
+        //     return;
+        // } else if(ignoreList.length == 2 && grid[ignoreList[0]].color == 'blue' && grid[i].color == 'red'){
+        //     return;
+        // } else if(ignoreList.length == 3 && grid[ignoreList[0]].color == 'blue' && grid[ignoreList[1]].color == 'red' && grid[ignoreList[ignoreList.length - 1]].color == 'blue'){
+        //     return;
+        // }
         
 
         // for oxygen & nitrogen molecules
@@ -174,9 +182,9 @@ c.addEventListener('mousemove', function (e){
 
                     if(grid[i].color != grid[ignoreList[ignoreList.length - 1]].color && grid[ignoreList[0]].color != 'blue'){
                         return;
-                    } else if(ignoreList.length == 2 && grid[ignoreList[0]].color == 'blue' && grid[i].color != 'red'){
+                    } else if(ignoreList.length == 1 && grid[ignoreList[0]].color == 'blue' && grid[i].color != 'red'){
                         return;
-                    } else if(ignoreList.length == 3 && grid[ignoreList[0]].color == 'blue' && grid[ignoreList[1]].color == 'red' && grid[ignoreList[ignoreList.length - 1]].color != 'blue'){
+                    } else if(ignoreList.length == 2 && grid[ignoreList[0]].color == 'blue' && grid[ignoreList[1]].color == 'red' && grid[ignoreList[ignoreList.length - 1]].color != 'blue'){
                         return;
                     }
 
