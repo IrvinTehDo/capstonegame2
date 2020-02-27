@@ -147,7 +147,7 @@ c.addEventListener('mousemove', function (e){
         // }
 
         // for oxygen & nitrogen molecules
-        if (ignoreList.length >=2 && ((grid.color || grid[ignoreList[ignoreList.length-1]].color == 'green' )|| (grid.color || grid[ignoreList[ignoreList.length - 1]].color == 'blue'))){
+        if (ignoreList.length >=2 && (grid[ignoreList[1]].color != 'red' && grid[ignoreList[0]] != 'blue')){
             return;
         }
 
@@ -170,16 +170,22 @@ c.addEventListener('mousemove', function (e){
                     // Then Check if it's horizontal or vertical. 
                     // Then check to prevent red dot's from connecting
 
-                    if(grid[i].color != grid[ignoreList[ignoreList.length - 1]].color){
+                    if(grid[i].color != grid[ignoreList[ignoreList.length - 1]].color && grid[ignoreList[0]].color != 'blue'){
+                        return;
+                    } else if(ignoreList.length == 1 && grid[ignoreList[0]].color == 'blue' && grid[i].color != 'red'){
+                        return;
+                    } else if(ignoreList.length == 2 && grid[ignoreList[0]].color == 'blue' && grid[ignoreList[1]].color == 'red' && grid[i].color != 'blue'){
                         return;
                     }
-                     if(ignoreList[ignoreList.length -1] + 6 != i &&
+
+                    if(ignoreList[ignoreList.length -1] + 6 != i &&
                         ignoreList[ignoreList.length -1] - 6 != i &&
                         ignoreList[ignoreList.length -1] + 1 != i &&
                         ignoreList[ignoreList.length -1] - 1 != i) {
                             return;
                     }
-                     if(grid[i].color && grid[ignoreList[ignoreList.length -1]].color == 'red'){
+
+                    if(grid[i].color == 'red' && grid[ignoreList[ignoreList.length -1]].color == 'red'){
                         return;
                     }
                 }
