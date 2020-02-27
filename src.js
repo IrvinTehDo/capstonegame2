@@ -142,11 +142,12 @@ c.addEventListener('mousemove', function (e){
         const mouse = {x: e.clientX, y: e.clientY};
 
         // Limit selectable dots to 3
-        if(ignoreList.length >= 3){
-            return;
-        }
+        // if(ignoreList.length >= 3 && grid.color != 'red'){
+        //     return;
+        // }
+
         // for oxygen & nitrogen molecules
-        else if (ignoreList.length >=2 && ((grid.color || grid[ignoreList[ignoreList.length-1]].color == 'green' )|| (grid.color || grid[ignoreList[ignoreList.length - 1]].color == 'blue'))){
+        if (ignoreList.length >=2 && ((grid.color || grid[ignoreList[ignoreList.length-1]].color == 'green' )|| (grid.color || grid[ignoreList[ignoreList.length - 1]].color == 'blue'))){
             return;
         }
 
@@ -167,13 +168,19 @@ c.addEventListener('mousemove', function (e){
                 if (ignoreList.length > 0) {
                     // Check if same color.
                     // Then Check if it's horizontal or vertical. 
+                    // Then check to prevent red dot's from connecting
+
                     if(grid[i].color != grid[ignoreList[ignoreList.length - 1]].color){
                         return;
-                    } else if(ignoreList[ignoreList.length -1] + 6 != i &&
+                    }
+                     if(ignoreList[ignoreList.length -1] + 6 != i &&
                         ignoreList[ignoreList.length -1] - 6 != i &&
                         ignoreList[ignoreList.length -1] + 1 != i &&
                         ignoreList[ignoreList.length -1] - 1 != i) {
                             return;
+                    }
+                     if(grid[i].color && grid[ignoreList[ignoreList.length -1]].color == 'red'){
+                        return;
                     }
                 }
 
