@@ -147,17 +147,10 @@ c.addEventListener('mousemove', function (e){
             return;
         }
  
-        // if( (grid.color != grid[ignoreList[1]].color) && grid.color == 'blue'){
-        //     return;
-        // } else if(ignoreList.length == 2 && grid[ignoreList[0]].color == 'blue' && grid[i].color == 'red'){
-        //     return;
-        // } else if(ignoreList.length == 3 && grid[ignoreList[0]].color == 'blue' && grid[ignoreList[1]].color == 'red' && grid[ignoreList[ignoreList.length - 1]].color == 'blue'){
-        //     return;
-        // }
         
 
         // for oxygen & nitrogen molecules
-        if (ignoreList.length >=2 && (grid[ignoreList[1]].color != 'red' && grid[ignoreList[0]] != 'blue')){
+        if (ignoreList.length == 3 || (ignoreList.length === 2 && grid[ignoreList[ignoreList.length - 1]].color === 'blue')){
             return;
         }
 
@@ -181,10 +174,10 @@ c.addEventListener('mousemove', function (e){
                     // Then check to prevent red dot's from connecting
 
                     if(grid[i].color != grid[ignoreList[ignoreList.length - 1]].color && grid[ignoreList[0]].color != 'blue'){
-                        return;
-                    } else if(ignoreList.length == 1 && grid[ignoreList[0]].color == 'blue' && grid[i].color != 'red'){
-                        return;
-                    } else if(ignoreList.length == 2 && grid[ignoreList[0]].color == 'blue' && grid[ignoreList[1]].color == 'red' && grid[ignoreList[ignoreList.length - 1]].color != 'blue'){
+                        return; }
+                     else if((grid[i].color != grid[ignoreList[ignoreList.length - 1]].color) && (ignoreList.length == 1 && grid[ignoreList[0]].color == 'blue' && grid[i].color != 'red')){
+                        return; }
+                     else if((grid[i].color != grid[ignoreList[ignoreList.length - 1]].color) && (ignoreList.length == 2 && grid[ignoreList[0]].color == 'blue' && grid[ignoreList[1]].color == 'red' && grid[ignoreList[ignoreList.length - 1]].color != 'blue')){
                         return;
                     }
 
