@@ -143,12 +143,10 @@ c.addEventListener('mousemove', function (e){
         const mouse = {x: e.clientX, y: e.clientY};
 
         // Limit selectable dots to 3
-        if(ignoreList.length >= 2 && grid.color != 'red'){
+        if(ignoreList.length >= 2 && grid[ignoreList[ignoreList.length-1]].color != 'red'){ 
             return;
         }
  
-        
-
         // for oxygen & nitrogen molecules
         if (ignoreList.length == 3 || (ignoreList.length === 2 && grid[ignoreList[ignoreList.length - 1]].color === 'blue')){
             return;
@@ -177,7 +175,7 @@ c.addEventListener('mousemove', function (e){
                         return; }
                      else if((grid[i].color != grid[ignoreList[ignoreList.length - 1]].color) && (ignoreList.length == 1 && grid[ignoreList[0]].color == 'blue' && grid[i].color != 'red')){
                         return; }
-                     else if((grid[i].color != grid[ignoreList[ignoreList.length - 1]].color) && (ignoreList.length == 2 && grid[ignoreList[0]].color == 'blue' && grid[ignoreList[1]].color == 'red' && grid[ignoreList[ignoreList.length - 1]].color != 'blue')){
+                     else if((grid[i].color != grid[ignoreList[ignoreList.length - 1]].color) && (ignoreList.length == 2 && grid[ignoreList[0]].color == 'blue' && grid[ignoreList[1]].color == 'red' && grid[i].color != 'blue')){
                         return;
                     }
 
@@ -195,7 +193,6 @@ c.addEventListener('mousemove', function (e){
 
                 lineSession.push(grid[i]);
                 ignoreList.push(i); // selected the three circles
-                console.log(ignoreList)
                 return;
             } 
         }
