@@ -114,6 +114,28 @@ const CheckScore = () => {
             var color = getColor(circleColors);
             grid[ignoreList[i]] = new elem(prevX, prevY, 25, color);
         }
+
+
+        if(ignoreList.length == 2){
+            if(ignoreList[0] + 1 == ignoreList[1] || ignoreList[0] - 1 == ignoreList[1]){ // Two in the same lane
+                let z = ignoreList[0];
+                if(z > ignoreList[1]) z = ignoreList[1];
+                for(z-1; z%6 != 0; z--){
+                    grid[z+2] = grid[z]; 
+                    grid[z+2].y += 200;
+                }
+                grid[z+2] = grid[z]; 
+                grid[z+2].y += 200;
+                grid[z] = new elem(grid[z].x, 100, 25, getColor(circleColors));
+                grid[z+1] = new elem(grid[z+1].x, 200, 25, getColor(circleColors));
+                // TO FIX: If picking from bottom 2, it will move 1 down and be out of bounds.
+            } else { // Two in different lanes
+
+            }
+        } else if(ignoreList.length == 3){
+
+        }
+
     }
 };
 
