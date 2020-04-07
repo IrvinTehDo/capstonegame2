@@ -55,7 +55,7 @@ const drawRect = (ctx, x, y, width, height, color) => {
 };
 
 const GenerateGrid = () => {
-    for(i = 1; i < 10; i++){  // 9 circles columns
+    for(i = 1; i < 12; i++){  // 9 circles columns
         for(j = 1; j < 7; j++){ // 7 rows
             var color = getColor(circleColors);
             const newEl = new elem(CENTER_X * i, CENTER_Y * j, 25, color);
