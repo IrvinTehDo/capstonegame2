@@ -3,25 +3,15 @@
 <head>
     <meta charset="utf-8">
     <title>Prototype 2</title>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+
+    <style>
+        body, html {
+            margin: 0;
+        }
+    </style>
 </head>
-<style>
-    body{
-        margin: 0
-    };
-    #background{
-        position: absolute;
-        z-index: 1;
-    }
-    #gameCanvas{
-        position: absolute;
-        z-index: 5;
-        left: 475px;
-        top: 162px;
-    }
 </style>
 <body>
-    <image id="background" src="assets/bg.png"></image>
     <canvas id="gameCanvas" width="1200" height="1000"></canvas>
     <script src="src.js"></script>
 </body>

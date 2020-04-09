@@ -1,7 +1,23 @@
 const c = document.getElementById("gameCanvas");
 const ctx = c.getContext("2d");
-const CENTER_X = 100;
-const CENTER_Y = 100;
+
+ctx.canvas.width = window.innerWidth;
+ctx.canvas.height = window.innerHeight;
+
+const NITROGEN = new Image();
+NITROGEN.src = "assets/nitrogen.svg";
+const OXYGEN = new Image();
+OXYGEN.src = "assets/oxygen.svg";
+const CARBON = new Image();
+CARBON.src = "assets/carbon.svg";
+
+const START_X = 446;
+const START_Y = 162;
+const SPACING_X = 110.67;
+const SPACING_Y = 95.67;
+const RADIUS = 35.8347;
+const ROWS = 6;
+const COLUMNS = 11;
 const grid = [];
 var lineSession = [];
 var ignoreList = [];
@@ -45,6 +61,15 @@ const DrawOvalShape = (ctx, center_x, center_y, radius, color) =>{
     ctx.closePath();
 };
 
+const DrawElement = (ctx, x, y, color) => {
+    var svg = '';
+    if(color == 'red') svg = CARBON;
+    else if(color == 'blue') svg = OXYGEN;
+    else if (color == 'green') svg = NITROGEN;
+
+    ctx.drawImage(svg, x, y);
+};
+
 // function to draw rectangle??
 
 const drawRect = (ctx, x, y, width, height, color) => {
@@ -55,10 +80,10 @@ const drawRect = (ctx, x, y, width, height, color) => {
 };
 
 const GenerateGrid = () => {
-    for(i = 1; i < 12; i++){  // 9 circles columns
-        for(j = 1; j < 7; j++){ // 7 rows
+    for(i = 1; i < COLUMNS + 1; i++){  // 9 circles columns
+        for(j = 1; j < ROWS + 1; j++){ // 7 rows
             var color = getColor(circleColors);
-            const newEl = new elem(CENTER_X * i, CENTER_Y * j, 25, color);
+            const newEl = new elem(START_X + (SPACING_X * i), START_Y + (SPACING_Y * j), RADIUS, color);
             grid.push(newEl);
         }
     }
@@ -72,10 +97,14 @@ const Update = () => {
 // draw it
 
 const Draw = () => {
-    ctx.clearRect(0,0,1000,1000);
+    ctx.clearRect(0,0,1920,1080);
+    const img = new Image();
+    img.src = "assets/bg.png";
+    ctx.drawImage(img,0,0,1903,941);
     Connect();
     for(var i = 0; i < grid.length; i++){
-        DrawOvalShape(ctx, grid[i].x, grid[i].y, 25, grid[i].color);
+        // DrawOvalShape(ctx, grid[i].x, grid[i].y, RADIUS, grid[i].color);
+        DrawElement(ctx, grid[i].x - (RADIUS + RADIUS/2), grid[i].y - (RADIUS + RADIUS/2), grid[i].color);
     }
 }
 
@@ -99,7 +128,7 @@ function drawLine (previous, element) {
     ctx.moveTo(previous.x, previous.y);
     ctx.lineTo(element.x, element.y);
     ctx.lineWidth = 5;
-    ctx.strokeStyle = "black";
+    ctx.strokeStyle = "white";
     ctx.stroke();
     ctx.closePath();
 }
@@ -112,7 +141,7 @@ const CheckScore = () => {
             const prevX = grid[ignoreList[i]].x;
             const prevY = grid[ignoreList[i]].y;
             var color = getColor(circleColors);
-            grid[ignoreList[i]] = new elem(prevX, prevY, 25, color);
+            grid[ignoreList[i]] = new elem(prevX, prevY, RADIUS, color);
         }
 
 
@@ -120,14 +149,14 @@ const CheckScore = () => {
             if(ignoreList[0] + 1 == ignoreList[1] || ignoreList[0] - 1 == ignoreList[1]){ // Two in the same lane
                 let z = ignoreList[0];
                 if(z > ignoreList[1]) z = ignoreList[1];
-                for(z-1; z%6 != 0; z--){
+                for(z-1; z%ROWS != 0; z--){
                     grid[z+2] = grid[z]; 
-                    grid[z+2].y += 200;
+                    grid[z+2].y += SPACING_Y*2;
                 }
                 grid[z+2] = grid[z]; 
-                grid[z+2].y += 200;
-                grid[z] = new elem(grid[z].x, 100, 25, getColor(circleColors));
-                grid[z+1] = new elem(grid[z+1].x, 200, 25, getColor(circleColors));
+                grid[z+2].y += SPACING_Y*2;
+                grid[z] = new elem(grid[z].x, START_Y + SPACING_Y, RADIUS, getColor(circleColors));
+                grid[z+1] = new elem(grid[z+1].x, START_Y + (SPACING_Y*2), RADIUS, getColor(circleColors));
                 // TO FIX: If picking from bottom 2, it will move 1 down and be out of bounds.
             } else { // Two in different lanes
 
@@ -201,8 +230,8 @@ c.addEventListener('mousemove', function (e){
                         return;
                     }
 
-                    if(ignoreList[ignoreList.length -1] + 6 != i &&
-                        ignoreList[ignoreList.length -1] - 6 != i &&
+                    if(ignoreList[ignoreList.length -1] + ROWS != i &&
+                        ignoreList[ignoreList.length -1] - ROWS != i &&
                         ignoreList[ignoreList.length -1] + 1 != i &&
                         ignoreList[ignoreList.length -1] - 1 != i) {
                             return;
