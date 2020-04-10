@@ -19,6 +19,10 @@ const RADIUS = 35.8347;
 const ROWS = 6;
 const COLUMNS = 11;
 const grid = [];
+
+var score = 1500;
+var time = '00:30';
+
 var lineSession = [];
 var ignoreList = [];
 const circleColors = {
@@ -70,6 +74,12 @@ const DrawElement = (ctx, x, y, color) => {
     ctx.drawImage(svg, x, y);
 };
 
+const DrawText = (ctx, x, y, font, type, size, style, text) => {
+    ctx.font = `${type} ${size}px ${font}`;
+    ctx.fillStyle = style;
+    ctx.fillText(text, x, y, 140);
+}
+
 // function to draw rectangle??
 
 const drawRect = (ctx, x, y, width, height, color) => {
@@ -101,6 +111,8 @@ const Draw = () => {
     const img = new Image();
     img.src = "assets/bg.png";
     ctx.drawImage(img,0,0,1903,941);
+    DrawText(ctx, 185, 235, 'Oxanium', 'normal', 40, 'white', score);
+    DrawText(ctx, 1625, 95, 'Oxanium', 'bold', 40, 'white', time);
     Connect();
     for(var i = 0; i < grid.length; i++){
         // DrawOvalShape(ctx, grid[i].x, grid[i].y, RADIUS, grid[i].color);
@@ -125,10 +137,12 @@ function drawLine (previous, element) {
     if(!element || !previous) return;
 
     ctx.beginPath();
-    ctx.moveTo(previous.x, previous.y);
-    ctx.lineTo(element.x, element.y);
+    ctx.strokeStyle = '#7283A3';
+    ctx.moveTo(previous.x- 10, previous.y - 10);
+    ctx.lineTo(element.x- 10, element.y - 10);
+    ctx.moveTo(previous.x + 10, previous.y + 10);
+    ctx.lineTo(element.x + 10, element.y + 10);
     ctx.lineWidth = 5;
-    ctx.strokeStyle = "white";
     ctx.stroke();
     ctx.closePath();
 }
