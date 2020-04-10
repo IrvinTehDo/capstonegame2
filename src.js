@@ -21,7 +21,9 @@ const COLUMNS = 11;
 const grid = [];
 
 var score = 0;
-var time = '00:30';
+var timer = '01:00';
+var time = 60;
+var frame = 0;
 
 var lineSession = [];
 var ignoreList = [];
@@ -102,6 +104,20 @@ const GenerateGrid = () => {
 
 // updates the line movement
 const Update = () => {
+    frame++;
+    console.log(frame);
+    if(frame == 60){
+        frame = 0;
+        time--;
+    }
+
+    if(time == 60){
+        timer = '01:00';
+    } else if(time < 60){
+        timer = `00:${time}`;
+    } else if (time <= 0){
+        timer = `00:00`;
+    }
 };
 
 // draw it
@@ -116,7 +132,7 @@ const Draw = () => {
     } else {
         DrawText(ctx, 185, 235, 'Oxanium', 'normal', 40, 'white', score);
     }
-    DrawText(ctx, 1625, 95, 'Oxanium', 'bold', 40, 'white', time);
+    DrawText(ctx, 1625, 95, 'Oxanium', 'bold', 40, 'white', timer);
     Connect();
     for(var i = 0; i < grid.length; i++){
         // DrawOvalShape(ctx, grid[i].x, grid[i].y, RADIUS, grid[i].color);
