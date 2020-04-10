@@ -20,7 +20,7 @@ const ROWS = 6;
 const COLUMNS = 11;
 const grid = [];
 
-var score = 1500;
+var score = 0;
 var time = '00:30';
 
 var lineSession = [];
@@ -111,7 +111,11 @@ const Draw = () => {
     const img = new Image();
     img.src = "assets/bg.png";
     ctx.drawImage(img,0,0,1903,941);
-    DrawText(ctx, 185, 235, 'Oxanium', 'normal', 40, 'white', score);
+    if(score == 0){
+        DrawText(ctx, 185, 235, 'Oxanium', 'normal', 40, 'white', '0000');
+    } else {
+        DrawText(ctx, 185, 235, 'Oxanium', 'normal', 40, 'white', score);
+    }
     DrawText(ctx, 1625, 95, 'Oxanium', 'bold', 40, 'white', time);
     Connect();
     for(var i = 0; i < grid.length; i++){
@@ -175,8 +179,10 @@ const CheckScore = () => {
             } else { // Two in different lanes
 
             }
-        } else if(ignoreList.length == 3){
 
+            score += 1000;
+        } else if(ignoreList.length == 3){
+            score += 1500;
         }
 
     }
