@@ -113,8 +113,10 @@ const Update = () => {
 
     if(time == 60){
         timer = '01:00';
-    } else if(time < 60 && time > 0){
+    } else if(time < 60 && time >= 10){
         timer = `00:${time}`;
+    } else if(time < 10 && time > 0){
+        timer = `00:0${time}`;
     } else if (time <= 0){
         timer = `00:00`;
     }
