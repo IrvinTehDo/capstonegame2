@@ -217,12 +217,38 @@ function drawLine (previous, element) {
     ctx.closePath();
 }
 
+const DropRow = () => {
+    for(let i = 0; i < ignoreList.length; i++){
+        let z = ignoreList[i];
+        let startingZ = z;
+
+        for(z; z%ROWS != 0; z--){
+            if(z < startingZ){
+                movingElem.push(new MovingElem(grid[z].y + SPACING_Y, z+1, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
+                grid[z+1] = grid[z]; 
+                grid[z+1].y += SPACING_Y;
+                grid[z+1].visable = false;
+            }
+        }
+
+        movingElem.push(new MovingElem(grid[z].y + SPACING_Y, z+1, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
+        grid[z+1] = grid[z]; 
+        grid[z+1].y += SPACING_Y;
+        grid[z+1].visable = false;
+
+        grid[z] = new elem(grid[z].x, START_Y, RADIUS, getColor(circleColors), true);
+        movingElem.push(new MovingElem( grid[z].y + SPACING_Y, z, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
+        grid[z].y += SPACING_Y;
+        grid[z].visable = false;
+    }
+}
 
 const CheckScore = () => {
     if(ignoreList.length == 3 || (ignoreList.length === 2 && grid[ignoreList[ignoreList.length - 1]].color === 'blue') ||(ignoreList.length === 2 && grid[ignoreList[ignoreList.length - 1]].color === 'green')
     ){
         if(ignoreList.length == 2){
-            if(ignoreList[0] + 1 == ignoreList[1] || ignoreList[0] - 1 == ignoreList[1]){ // Two in the same lane
+            if(ignoreList[0] + 1 == ignoreList[1] || ignoreList[0] - 1 == ignoreList[1]){ 
+                // Two in the same lane
                 // z is what we selected
                 let z = ignoreList[0];
                 // if z is later in the list of elements, swap because we want the top to be the first.
@@ -260,62 +286,83 @@ const CheckScore = () => {
 
             } else { 
                 // Two in different lanes
-
-                //1st iteration
-                let z = ignoreList[0];
-                var startingZ = z;
-
-                for(z; z%ROWS != 0; z--){
-                    if(z < startingZ){
-                        movingElem.push(new MovingElem(grid[z].y + SPACING_Y, z+1, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
-                        grid[z+1] = grid[z]; 
-                        grid[z+1].y += SPACING_Y;
-                        grid[z+1].visable = false;
-                    }
-                }
-
-                movingElem.push(new MovingElem(grid[z].y + SPACING_Y, z+1, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
-                grid[z+1] = grid[z]; 
-                grid[z+1].y += SPACING_Y;
-                grid[z+1].visable = false;
-
-                grid[z] = new elem(grid[z].x, START_Y, RADIUS, getColor(circleColors), true);
-                movingElem.push(new MovingElem( grid[z].y + SPACING_Y, z, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
-                grid[z].y += SPACING_Y;
-                grid[z].visable = false;
-
-                //2nd iteration
-                z = ignoreList[1];
-                startingZ = z;
-
-                for(z; z%ROWS != 0; z--){
-                    if(z < startingZ){
-                        movingElem.push(new MovingElem(grid[z].y + SPACING_Y, z+1, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
-                        grid[z+1] = grid[z]; 
-                        grid[z+1].y += SPACING_Y;
-                        grid[z+1].visable = false;
-                    }
-                }
-
-                movingElem.push(new MovingElem(grid[z].y + SPACING_Y, z+1, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
-                grid[z+1] = grid[z]; 
-                grid[z+1].y += SPACING_Y;
-                grid[z+1].visable = false;
-
-                grid[z] = new elem(grid[z].x, START_Y, RADIUS, getColor(circleColors), true);
-                movingElem.push(new MovingElem( grid[z].y + SPACING_Y, z, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
-                grid[z].y += SPACING_Y;
-                grid[z].visable = false;
+                DropRow();
             }
 
             score += 1000;
         } else if(ignoreList.length == 3){
-            for(let i = 0; i < ignoreList.length; i++){
-                const prevX = grid[ignoreList[i]].x;
-                const prevY = grid[ignoreList[i]].y;
-                var color = getColor(circleColors);
-                grid[ignoreList[i]] = new elem(prevX, prevY, RADIUS, color, true);
+            // case for 3 vertical
+            // case for 3 horizontal
+            // case for 3 L-shaped
+
+            if(ignoreList[0] + 1 == ignoreList[1] && ignoreList[1] + 1 == ignoreList[2] || ignoreList[0] - 1 == ignoreList[1] && ignoreList[1] - 1 == ignoreList[2]){
+                // case for 3 vertical
+
+                // z is what we selected
+                let z = ignoreList[0];
+                // if z is later in the list of elements, swap because we want the top to be the first.
+                if(z > ignoreList[1]) z = ignoreList[1];
+                if(z > ignoreList[2]) z = ignoreList[2];
+
+                const startingZ = z;
+
+                // Prevent bug where picking 2 from bottom, move out of bounds
+                if((z+3)%ROWS == 1 || (z+3)%ROWS == 0){
+                    z--;
+                }
+
+                for(z; z%ROWS != 0; z--){
+                    if(z < startingZ){
+                        movingElem.push(new MovingElem(grid[z].y + SPACING_Y*3, z+3, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
+                        grid[z+3] = grid[z]; 
+                        grid[z+3].y += SPACING_Y*3;
+                        grid[z+3].visable = false;
+                    }
+                }
+                movingElem.push(new MovingElem(grid[z].y + SPACING_Y*3, z+3, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
+                grid[z+3] = grid[z]; 
+                grid[z+3].y += SPACING_Y*3;
+                grid[z+3].visable = false;
+
+                grid[z] = new elem(grid[z].x, START_Y, RADIUS, getColor(circleColors), true);
+                movingElem.push(new MovingElem( grid[z].y + SPACING_Y, z, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
+                grid[z].y += SPACING_Y;
+                grid[z].visable = false;
+
+                grid[z+1] = new elem(grid[z+1].x, START_Y, RADIUS, getColor(circleColors), true);
+                movingElem.push(new MovingElem(grid[z+1].y + (SPACING_Y*2), z+1 ,new elem(grid[z+1].x, grid[z+1].y, grid[z+1].radius, grid[z+1].color, true)));
+                grid[z+1].y += SPACING_Y*2;
+                grid[z+1].visable = false;
+
+                grid[z+2] = new elem(grid[z+2].x, START_Y, RADIUS, getColor(circleColors), true);
+                movingElem.push(new MovingElem(grid[z+2].y + (SPACING_Y*3), z+2 ,new elem(grid[z+2].x, grid[z+2].y, grid[z+2].radius, grid[z+2].color, true)));
+                grid[z+2].y += SPACING_Y*3;
+                grid[z+2].visable = false;
+            } else if (ignoreList[0] + ROWS == ignoreList[1] && ignoreList[1] + ROWS == ignoreList[2] || ignoreList[0] - ROWS == ignoreList[1] && ignoreList[1] - ROWS == ignoreList[2]) {
+                // case for 3 horizontal
+                DropRow();
+                
+            } else {
+                // case for 3 L-shaped
+                console.log('L-Shaped');
+                // Identify Duo, will be stacked on top of each other in same column
+                // Identify Loner, will be alone in their column
+                // apply drop logic to duo
+                // apply drop logic to loner
             }
+
+
+
+
+
+
+
+            // for(let i = 0; i < ignoreList.length; i++){
+            //     const prevX = grid[ignoreList[i]].x;
+            //     const prevY = grid[ignoreList[i]].y;
+            //     var color = getColor(circleColors);
+            //     grid[ignoreList[i]] = new elem(prevX, prevY, RADIUS, color, true);
+            // }
             score += 1500;
         }
 
