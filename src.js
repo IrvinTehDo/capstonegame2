@@ -200,7 +200,7 @@ const Draw = () => {
         }
     }
 
-    // From 0 -> 175 width
+    // From 0 -> 175 width score*(maxWidth/scale)
     ctx.drawImage(BLUEBAR, 170,336, blueScore*(175/100), 9);
     ctx.drawImage(GREENBAR, 170,375, greenScore*(175/100), 10);
     ctx.drawImage(REDBAR, 170,417, redScore*(175/100), 10);
