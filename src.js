@@ -344,25 +344,82 @@ const CheckScore = () => {
                 
             } else {
                 // case for 3 L-shaped
-                console.log('L-Shaped');
                 // Identify Duo, will be stacked on top of each other in same column
                 // Identify Loner, will be alone in their column
+                // If 1st pick and 2nd pick is +-1 of each other, they're in same column, else 2nd and 3rd pick are same column
+                let duo = [];
+                let single = 0;
+
+                if(ignoreList[1] + 1 == ignoreList[0] || ignoreList[1] - 1 == ignoreList[0]){
+                    duo.push(ignoreList[0]);
+                    duo.push(ignoreList[1]);
+                    single = ignoreList[2];
+                } else {
+                    duo.push(ignoreList[2]);
+                    duo.push(ignoreList[1]);
+                    single = ignoreList[0];
+                }
+
                 // apply drop logic to duo
+
+                // z is what we selected
+                let z = duo[0];
+                // if z is later in the list of elements, swap because we want the top to be the first.
+                if(z > duo[1]) z = duo[1];
+
+                var startingZ = z;
+
+                // Prevent bug where picking 2 from bottom, move out of bounds
+                if((z+2)%ROWS == 1 || (z+2)%ROWS == 0){
+                    z--;
+                }
+
+                for(z; z%ROWS != 0; z--){
+                    if(z < startingZ){
+                        movingElem.push(new MovingElem(grid[z].y + SPACING_Y*2, z+2, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
+                        grid[z+2] = grid[z]; 
+                        grid[z+2].y += SPACING_Y*2;
+                        grid[z+2].visable = false;
+                    }
+                }
+                movingElem.push(new MovingElem(grid[z].y + SPACING_Y*2, z+2, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
+                grid[z+2] = grid[z]; 
+                grid[z+2].y += SPACING_Y*2;
+                grid[z+2].visable = false;
+
+                grid[z] = new elem(grid[z].x, START_Y, RADIUS, getColor(circleColors), true);
+                movingElem.push(new MovingElem( grid[z].y + SPACING_Y, z, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
+                grid[z].y += SPACING_Y;
+                grid[z].visable = false;
+
+                grid[z+1] = new elem(grid[z+1].x, START_Y, RADIUS, getColor(circleColors), true);
+                movingElem.push(new MovingElem(grid[z+1].y + (SPACING_Y*2), z+1 ,new elem(grid[z+1].x, grid[z+1].y, grid[z+1].radius, grid[z+1].color, true)));
+                grid[z+1].y += SPACING_Y*2;
+                grid[z+1].visable = false;
+
                 // apply drop logic to loner
+                z = single;
+                startingZ = z;
+
+                for(z; z%ROWS != 0; z--){
+                    if(z < startingZ){
+                        movingElem.push(new MovingElem(grid[z].y + SPACING_Y, z+1, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
+                        grid[z+1] = grid[z]; 
+                        grid[z+1].y += SPACING_Y;
+                        grid[z+1].visable = false;
+                    }
+                }
+        
+                movingElem.push(new MovingElem(grid[z].y + SPACING_Y, z+1, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
+                grid[z+1] = grid[z]; 
+                grid[z+1].y += SPACING_Y;
+                grid[z+1].visable = false;
+        
+                grid[z] = new elem(grid[z].x, START_Y, RADIUS, getColor(circleColors), true);
+                movingElem.push(new MovingElem( grid[z].y + SPACING_Y, z, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
+                grid[z].y += SPACING_Y;
+                grid[z].visable = false;
             }
-
-
-
-
-
-
-
-            // for(let i = 0; i < ignoreList.length; i++){
-            //     const prevX = grid[ignoreList[i]].x;
-            //     const prevY = grid[ignoreList[i]].y;
-            //     var color = getColor(circleColors);
-            //     grid[ignoreList[i]] = new elem(prevX, prevY, RADIUS, color, true);
-            // }
             score += 1500;
         }
 
