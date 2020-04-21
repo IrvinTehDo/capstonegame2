@@ -51,11 +51,12 @@ function getColor(input) {
 
 
 // function to get circle x,y, and radius
-function elem(x, y, radius, color) {
+function elem(x, y, radius, color, visable) {
     this.x = x;
     this.y = y;
     this.radius = radius;
     this.color = color;
+    this.visable = visable;
 }
 
 // function to draw circles
@@ -95,10 +96,10 @@ const GenerateGrid = () => {
     for(i = 1; i < COLUMNS + 1; i++){  // 9 circles columns
         for(j = 1; j < ROWS + 1; j++){ // 7 rows
             var color = getColor(circleColors);
-            const newEl = new elem(START_X + (SPACING_X * i), START_Y + (SPACING_Y * j), RADIUS, color);
+            const newEl = new elem(START_X + (SPACING_X * i), START_Y + (SPACING_Y * j), RADIUS, color, true);
             grid.push(newEl);
         }
-    }
+    }   
 }
 
 
@@ -138,7 +139,9 @@ const Draw = () => {
     Connect();
     for(var i = 0; i < grid.length; i++){
         // DrawOvalShape(ctx, grid[i].x, grid[i].y, RADIUS, grid[i].color);
-        DrawElement(ctx, grid[i].x - (RADIUS + RADIUS/2), grid[i].y - (RADIUS + RADIUS/2), grid[i].color);
+        if(grid[i].visable){
+            DrawElement(ctx, grid[i].x - (RADIUS + RADIUS/2), grid[i].y - (RADIUS + RADIUS/2), grid[i].color);
+        }
     }
 }
 
@@ -173,33 +176,55 @@ function drawLine (previous, element) {
 const CheckScore = () => {
     if(ignoreList.length == 3 || (ignoreList.length === 2 && grid[ignoreList[ignoreList.length - 1]].color === 'blue') ||(ignoreList.length === 2 && grid[ignoreList[ignoreList.length - 1]].color === 'green')
     ){
-        for(let i = 0; i < ignoreList.length; i++){
-            const prevX = grid[ignoreList[i]].x;
-            const prevY = grid[ignoreList[i]].y;
-            var color = getColor(circleColors);
-            grid[ignoreList[i]] = new elem(prevX, prevY, RADIUS, color);
-        }
+        // for(let i = 0; i < ignoreList.length; i++){
+        //     const prevX = grid[ignoreList[i]].x;
+        //     const prevY = grid[ignoreList[i]].y;
+        //     var color = getColor(circleColors);
+        //     grid[ignoreList[i]] = new elem(prevX, prevY, RADIUS, color, true);
+        // }
 
 
         if(ignoreList.length == 2){
             if(ignoreList[0] + 1 == ignoreList[1] || ignoreList[0] - 1 == ignoreList[1]){ // Two in the same lane
+                // z is what we selected
                 let z = ignoreList[0];
+                // if z is later in the list of elements, swap because we want the top to be the first.
                 if(z > ignoreList[1]) z = ignoreList[1];
-                for(z-1; z%ROWS != 0; z--){
-                    grid[z+2] = grid[z]; 
-                    grid[z+2].y += SPACING_Y*2;
+
+                const startingZ = z;
+
+                // Prevent bug where picking 2 from bottom, move out of bounds
+                if((z+2)%ROWS == 1 || (z+2)%ROWS == 0){
+                    z--;
+                }
+
+                for(z; z%ROWS != 0; z--){
+                    if(z < startingZ){
+                        grid[z+2] = grid[z]; 
+                        grid[z+2].y += SPACING_Y*2;
+                    }
                 }
                 grid[z+2] = grid[z]; 
                 grid[z+2].y += SPACING_Y*2;
-                grid[z] = new elem(grid[z].x, START_Y + SPACING_Y, RADIUS, getColor(circleColors));
-                grid[z+1] = new elem(grid[z+1].x, START_Y + (SPACING_Y*2), RADIUS, getColor(circleColors));
-                // TO FIX: If picking from bottom 2, it will move 1 down and be out of bounds.
+                grid[z] = new elem(grid[z].x, START_Y + SPACING_Y, RADIUS, getColor(circleColors), true);
+                grid[z+1] = new elem(grid[z+1].x, START_Y + (SPACING_Y*2), RADIUS, getColor(circleColors), true);
             } else { // Two in different lanes
-
+                for(let i = 0; i < ignoreList.length; i++){
+                    const prevX = grid[ignoreList[i]].x;
+                    const prevY = grid[ignoreList[i]].y;
+                    var color = getColor(circleColors);
+                    grid[ignoreList[i]] = new elem(prevX, prevY, RADIUS, color, true);
+                }
             }
 
             score += 1000;
         } else if(ignoreList.length == 3){
+            for(let i = 0; i < ignoreList.length; i++){
+                const prevX = grid[ignoreList[i]].x;
+                const prevY = grid[ignoreList[i]].y;
+                var color = getColor(circleColors);
+                grid[ignoreList[i]] = new elem(prevX, prevY, RADIUS, color, true);
+            }
             score += 1500;
         }
 
