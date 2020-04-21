@@ -222,19 +222,21 @@ const DropRow = () => {
         let z = ignoreList[i];
         let startingZ = z;
 
-        for(z; z%ROWS != 0; z--){
-            if(z < startingZ){
-                movingElem.push(new MovingElem(grid[z].y + SPACING_Y, z+1, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
-                grid[z+1] = grid[z]; 
-                grid[z+1].y += SPACING_Y;
-                grid[z+1].visable = false;
+        if(startingZ%ROWS != 0){
+            for(z; z%ROWS != 0; z--){
+                if(z < startingZ){
+                    movingElem.push(new MovingElem(grid[z].y + SPACING_Y, z+1, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
+                    grid[z+1] = grid[z]; 
+                    grid[z+1].y += SPACING_Y;
+                    grid[z+1].visable = false;
+                }
             }
+    
+            movingElem.push(new MovingElem(grid[z].y + SPACING_Y, z+1, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
+            grid[z+1] = grid[z]; 
+            grid[z+1].y += SPACING_Y;
+            grid[z+1].visable = false;
         }
-
-        movingElem.push(new MovingElem(grid[z].y + SPACING_Y, z+1, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
-        grid[z+1] = grid[z]; 
-        grid[z+1].y += SPACING_Y;
-        grid[z+1].visable = false;
 
         grid[z] = new elem(grid[z].x, START_Y, RADIUS, getColor(circleColors), true);
         movingElem.push(new MovingElem( grid[z].y + SPACING_Y, z, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
@@ -261,18 +263,20 @@ const CheckScore = () => {
                     z--;
                 }
 
-                for(z; z%ROWS != 0; z--){
-                    if(z < startingZ){
-                        movingElem.push(new MovingElem(grid[z].y + SPACING_Y*2, z+2, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
-                        grid[z+2] = grid[z]; 
-                        grid[z+2].y += SPACING_Y*2;
-                        grid[z+2].visable = false;
+                if(startingZ%ROWS != 0){
+                    for(z; z%ROWS != 0; z--){
+                        if(z < startingZ){
+                            movingElem.push(new MovingElem(grid[z].y + SPACING_Y*2, z+2, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
+                            grid[z+2] = grid[z]; 
+                            grid[z+2].y += SPACING_Y*2;
+                            grid[z+2].visable = false;
+                        }
                     }
+                    movingElem.push(new MovingElem(grid[z].y + SPACING_Y*2, z+2, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
+                    grid[z+2] = grid[z]; 
+                    grid[z+2].y += SPACING_Y*2;
+                    grid[z+2].visable = false;
                 }
-                movingElem.push(new MovingElem(grid[z].y + SPACING_Y*2, z+2, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
-                grid[z+2] = grid[z]; 
-                grid[z+2].y += SPACING_Y*2;
-                grid[z+2].visable = false;
 
                 grid[z] = new elem(grid[z].x, START_Y, RADIUS, getColor(circleColors), true);
                 movingElem.push(new MovingElem( grid[z].y + SPACING_Y, z, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
@@ -311,18 +315,20 @@ const CheckScore = () => {
                     z--;
                 }
 
-                for(z; z%ROWS != 0; z--){
-                    if(z < startingZ){
-                        movingElem.push(new MovingElem(grid[z].y + SPACING_Y*3, z+3, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
-                        grid[z+3] = grid[z]; 
-                        grid[z+3].y += SPACING_Y*3;
-                        grid[z+3].visable = false;
+                if(startingZ%ROWS != 0){
+                    for(z; z%ROWS != 0; z--){
+                        if(z < startingZ){
+                            movingElem.push(new MovingElem(grid[z].y + SPACING_Y*3, z+3, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
+                            grid[z+3] = grid[z]; 
+                            grid[z+3].y += SPACING_Y*3;
+                            grid[z+3].visable = false;
+                        }
                     }
+                    movingElem.push(new MovingElem(grid[z].y + SPACING_Y*3, z+3, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
+                    grid[z+3] = grid[z]; 
+                    grid[z+3].y += SPACING_Y*3;
+                    grid[z+3].visable = false;
                 }
-                movingElem.push(new MovingElem(grid[z].y + SPACING_Y*3, z+3, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
-                grid[z+3] = grid[z]; 
-                grid[z+3].y += SPACING_Y*3;
-                grid[z+3].visable = false;
 
                 grid[z] = new elem(grid[z].x, START_Y, RADIUS, getColor(circleColors), true);
                 movingElem.push(new MovingElem( grid[z].y + SPACING_Y, z, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
@@ -367,25 +373,27 @@ const CheckScore = () => {
                 // if z is later in the list of elements, swap because we want the top to be the first.
                 if(z > duo[1]) z = duo[1];
 
-                var startingZ = z;
+                let startingZ = z;
 
                 // Prevent bug where picking 2 from bottom, move out of bounds
                 if((z+2)%ROWS == 1 || (z+2)%ROWS == 0){
                     z--;
                 }
 
-                for(z; z%ROWS != 0; z--){
-                    if(z < startingZ){
-                        movingElem.push(new MovingElem(grid[z].y + SPACING_Y*2, z+2, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
-                        grid[z+2] = grid[z]; 
-                        grid[z+2].y += SPACING_Y*2;
-                        grid[z+2].visable = false;
+                if(startingZ%ROWS != 0){
+                    for(z; z%ROWS != 0; z--){
+                        if(z < startingZ){
+                            movingElem.push(new MovingElem(grid[z].y + SPACING_Y*2, z+2, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
+                            grid[z+2] = grid[z]; 
+                            grid[z+2].y += SPACING_Y*2;
+                            grid[z+2].visable = false;
+                        }
                     }
+                    movingElem.push(new MovingElem(grid[z].y + SPACING_Y*2, z+2, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
+                    grid[z+2] = grid[z]; 
+                    grid[z+2].y += SPACING_Y*2;
+                    grid[z+2].visable = false;
                 }
-                movingElem.push(new MovingElem(grid[z].y + SPACING_Y*2, z+2, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
-                grid[z+2] = grid[z]; 
-                grid[z+2].y += SPACING_Y*2;
-                grid[z+2].visable = false;
 
                 grid[z] = new elem(grid[z].x, START_Y, RADIUS, getColor(circleColors), true);
                 movingElem.push(new MovingElem( grid[z].y + SPACING_Y, z, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
@@ -401,19 +409,21 @@ const CheckScore = () => {
                 z = single;
                 startingZ = z;
 
-                for(z; z%ROWS != 0; z--){
-                    if(z < startingZ){
-                        movingElem.push(new MovingElem(grid[z].y + SPACING_Y, z+1, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
-                        grid[z+1] = grid[z]; 
-                        grid[z+1].y += SPACING_Y;
-                        grid[z+1].visable = false;
+                if(startingZ%ROWS != 0){
+                    for(z; z%ROWS != 0; z--){
+                        if(z < startingZ){
+                            movingElem.push(new MovingElem(grid[z].y + SPACING_Y, z+1, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
+                            grid[z+1] = grid[z]; 
+                            grid[z+1].y += SPACING_Y;
+                            grid[z+1].visable = false;
+                        }
                     }
+            
+                    movingElem.push(new MovingElem(grid[z].y + SPACING_Y, z+1, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
+                    grid[z+1] = grid[z]; 
+                    grid[z+1].y += SPACING_Y;
+                    grid[z+1].visable = false;
                 }
-        
-                movingElem.push(new MovingElem(grid[z].y + SPACING_Y, z+1, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
-                grid[z+1] = grid[z]; 
-                grid[z+1].y += SPACING_Y;
-                grid[z+1].visable = false;
         
                 grid[z] = new elem(grid[z].x, START_Y, RADIUS, getColor(circleColors), true);
                 movingElem.push(new MovingElem( grid[z].y + SPACING_Y, z, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
