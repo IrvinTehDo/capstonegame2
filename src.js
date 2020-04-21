@@ -35,6 +35,8 @@ const circleColors = {
 var selected = null;
 var mouseDown = false;
 
+const movingElem = [];
+
 // function for weighted colors
 // https://stackoverflow.com/questions/43566019/how-to-choose-a-weighted-random-array-element-in-javascript
 function getColor(input) {
@@ -51,12 +53,22 @@ function getColor(input) {
 
 
 // function to get circle x,y, and radius
-function elem(x, y, radius, color, visable) {
-    this.x = x;
-    this.y = y;
-    this.radius = radius;
-    this.color = color;
-    this.visable = visable;
+// function elem(x, y, radius, color, visable) {
+//     this.x = x;
+//     this.y = y;
+//     this.radius = radius;
+//     this.color = color;
+//     this.visable = visable;
+// }
+
+class elem{
+    constructor(x, y, radius, color, visable){
+        this.x = x;
+        this.y = y;
+        this.radius = radius;
+        this.color = color;
+        this.visable = visable;
+    }
 }
 
 // function to draw circles
@@ -100,13 +112,37 @@ const GenerateGrid = () => {
             grid.push(newEl);
         }
     }   
+};
+
+class MovingElem {
+    constructor(moveToY, elemNum, elem){
+        this.moveToY = moveToY;
+        this.elemNum = elemNum;
+        this.elem = elem;
+    }
+
+    update = () => {
+        if(this.elem.y < this.moveToY){
+            this.elem.y += 10;
+        } else if(this.elem.y >= this.moveToY){
+            // make element at elemNum visable
+            // delete this elem
+            grid[this.elemNum].visable = true;
+            this.elem.visable = false;
+
+            for(var i = 0; i < movingElem.length; i++){
+                if(movingElem[i] == this){
+                    movingElem.splice(i, 1);
+                }
+            }
+        }
+    }
 }
 
 
 // updates the line movement
 const Update = () => {
     frame++;
-    console.log(frame);
     if(frame == 60){
         frame = 0;
         time--;
@@ -120,6 +156,10 @@ const Update = () => {
         timer = `00:0${time}`;
     } else if (time <= 0){
         timer = `00:00`;
+    }
+
+    for(var i = 0; i < movingElem.length; i++){
+        movingElem[i].update();
     }
 };
 
@@ -141,6 +181,11 @@ const Draw = () => {
         // DrawOvalShape(ctx, grid[i].x, grid[i].y, RADIUS, grid[i].color);
         if(grid[i].visable){
             DrawElement(ctx, grid[i].x - (RADIUS + RADIUS/2), grid[i].y - (RADIUS + RADIUS/2), grid[i].color);
+        }
+    }
+    for(var i = 0; i < movingElem.length; i++){
+        if(movingElem[i].elem.visable){
+            DrawElement(ctx, movingElem[i].elem.x - (RADIUS + RADIUS/2), movingElem[i].elem.y - (RADIUS + RADIUS/2), movingElem[i].elem.color);
         }
     }
 }
@@ -176,14 +221,6 @@ function drawLine (previous, element) {
 const CheckScore = () => {
     if(ignoreList.length == 3 || (ignoreList.length === 2 && grid[ignoreList[ignoreList.length - 1]].color === 'blue') ||(ignoreList.length === 2 && grid[ignoreList[ignoreList.length - 1]].color === 'green')
     ){
-        // for(let i = 0; i < ignoreList.length; i++){
-        //     const prevX = grid[ignoreList[i]].x;
-        //     const prevY = grid[ignoreList[i]].y;
-        //     var color = getColor(circleColors);
-        //     grid[ignoreList[i]] = new elem(prevX, prevY, RADIUS, color, true);
-        // }
-
-
         if(ignoreList.length == 2){
             if(ignoreList[0] + 1 == ignoreList[1] || ignoreList[0] - 1 == ignoreList[1]){ // Two in the same lane
                 // z is what we selected
@@ -200,14 +237,28 @@ const CheckScore = () => {
 
                 for(z; z%ROWS != 0; z--){
                     if(z < startingZ){
+                        movingElem.push(new MovingElem(grid[z].y + SPACING_Y*2, z+2, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
                         grid[z+2] = grid[z]; 
                         grid[z+2].y += SPACING_Y*2;
+                        grid[z+2].visable = false;
                     }
                 }
+                movingElem.push(new MovingElem(grid[z].y + SPACING_Y*2, z+2, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
                 grid[z+2] = grid[z]; 
                 grid[z+2].y += SPACING_Y*2;
-                grid[z] = new elem(grid[z].x, START_Y + SPACING_Y, RADIUS, getColor(circleColors), true);
-                grid[z+1] = new elem(grid[z+1].x, START_Y + (SPACING_Y*2), RADIUS, getColor(circleColors), true);
+                grid[z+2].visable = false;
+
+                grid[z] = new elem(grid[z].x, START_Y, RADIUS, getColor(circleColors), true);
+                movingElem.push(new MovingElem( grid[z].y + SPACING_Y, z, new elem(grid[z].x, grid[z].y, grid[z].radius, grid[z].color, true)));
+                grid[z].y += SPACING_Y;
+                grid[z].visable = false;
+
+                grid[z+1] = new elem(grid[z+1].x, START_Y, RADIUS, getColor(circleColors), true);
+                movingElem.push(new MovingElem(grid[z+1].y + (SPACING_Y*2), z+1 ,new elem(grid[z+1].x, grid[z+1].y, grid[z+1].radius, grid[z+1].color, true)));
+                grid[z+1].y += SPACING_Y*2;
+                grid[z+1].visable = false;
+
+                console.dir(movingElem);
             } else { // Two in different lanes
                 for(let i = 0; i < ignoreList.length; i++){
                     const prevX = grid[ignoreList[i]].x;
