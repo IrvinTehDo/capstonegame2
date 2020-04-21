@@ -11,6 +11,13 @@ OXYGEN.src = "assets/oxygen.svg";
 const CARBON = new Image();
 CARBON.src = "assets/carbon.svg";
 
+const GREENBAR = new Image();
+GREENBAR.src = "assets/greenbar.png";
+const BLUEBAR = new Image();
+BLUEBAR.src = "assets/bluebar.png";
+const REDBAR = new Image();
+REDBAR.src = "assets/redbar.png";
+
 const START_X = 446;
 const START_Y = 162;
 const SPACING_X = 110.67;
@@ -19,6 +26,10 @@ const RADIUS = 35.8347;
 const ROWS = 6;
 const COLUMNS = 11;
 const grid = [];
+
+let blueScore = 0;
+let redScore = 0;
+let greenScore = 0;
 
 var score = 0;
 var timer = '01:00';
@@ -95,7 +106,7 @@ const DrawText = (ctx, x, y, font, type, size, style, text) => {
     ctx.fillText(text, x, y, 140);
 }
 
-// function to draw rectangle??
+// function to draw rectangle
 
 const drawRect = (ctx, x, y, width, height, color) => {
     ctx.beginPath();
@@ -188,6 +199,11 @@ const Draw = () => {
             DrawElement(ctx, movingElem[i].elem.x - (RADIUS + RADIUS/2), movingElem[i].elem.y - (RADIUS + RADIUS/2), movingElem[i].elem.color);
         }
     }
+
+    // From 0 -> 175 width
+    ctx.drawImage(BLUEBAR, 170,336, blueScore*(175/100), 9);
+    ctx.drawImage(GREENBAR, 170,375, greenScore*(175/100), 10);
+    ctx.drawImage(REDBAR, 170,417, redScore*(175/100), 10);
 }
 
 const Connect = () => {
@@ -294,6 +310,11 @@ const CheckScore = () => {
             }
 
             score += 1000;
+            if(grid[ignoreList[0]].color == 'blue'){
+                blueScore += 2;
+            } else {
+                greenScore += 2;
+            }
         } else if(ignoreList.length == 3){
             // case for 3 vertical
             // case for 3 horizontal
@@ -431,6 +452,8 @@ const CheckScore = () => {
                 grid[z].visable = false;
             }
             score += 1500;
+            blueScore += 2;
+            redScore++;
         }
 
     }
