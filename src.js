@@ -257,8 +257,7 @@ const CheckScore = () => {
                 movingElem.push(new MovingElem(grid[z+1].y + (SPACING_Y*2), z+1 ,new elem(grid[z+1].x, grid[z+1].y, grid[z+1].radius, grid[z+1].color, true)));
                 grid[z+1].y += SPACING_Y*2;
                 grid[z+1].visable = false;
-
-                console.dir(movingElem);
+                
             } else { // Two in different lanes
                 for(let i = 0; i < ignoreList.length; i++){
                     const prevX = grid[ignoreList[i]].x;
