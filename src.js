@@ -40,8 +40,8 @@ var lineSession = [];
 var ignoreList = [];
 const circleColors = {
     'red': 20,
-    'blue': 40,
-    'green': 40,
+    'blue': 50,
+    'green': 30,
 };
 var selected = null;
 var mouseDown = false;
@@ -211,23 +211,59 @@ const Connect = () => {
         return;
     }
 
-    for (i = 1; i < grid.length; i++){
-        const previous = lineSession[i - 1];
-        const current = lineSession[i];
-        drawLine(previous, current);
+    //success color: #bd8aff
+    //regular color: #7283A3
+    const SUCCESSCOLOR = '#bd8aff';
+    const REGULARCOLOR = '#7283A3';
+    let color = REGULARCOLOR;
+
+    if(lineSession.length == 2 && !(lineSession[0].color == 'blue' && lineSession[1].color == 'red')){
+        color = SUCCESSCOLOR;
+    } else if(lineSession.length == 3){
+        color = SUCCESSCOLOR;
+    }
+
+    if(lineSession[0].color == 'green'){
+        for (i = 1; i < grid.length; i++){
+            const previous = lineSession[i - 1];
+            const current = lineSession[i];
+            drawTripleLine(previous, current, color);
+        }
+    } else{
+        for (i = 1; i < grid.length; i++){
+            const previous = lineSession[i - 1];
+            const current = lineSession[i];
+            drawLine(previous, current, color);
+        }
     }
 }
 
 
-function drawLine (previous, element) {
+function drawLine (previous, element, color) {
     if(!element || !previous) return;
 
     ctx.beginPath();
-    ctx.strokeStyle = '#7283A3';
+    ctx.strokeStyle = color;
     ctx.moveTo(previous.x- 10, previous.y - 10);
     ctx.lineTo(element.x- 10, element.y - 10);
     ctx.moveTo(previous.x + 10, previous.y + 10);
     ctx.lineTo(element.x + 10, element.y + 10);
+    ctx.lineWidth = 5;
+    ctx.stroke();
+    ctx.closePath();
+}
+
+const drawTripleLine = (previous, element, color) => {
+    if(!element || !previous) return;
+
+    ctx.beginPath();
+    ctx.strokeStyle = color;
+    ctx.moveTo(previous.x- 20, previous.y - 20);
+    ctx.lineTo(element.x- 20, element.y - 20);
+    ctx.moveTo(previous.x + 20, previous.y + 20);
+    ctx.lineTo(element.x + 20, element.y + 20);
+    ctx.moveTo(previous.x, previous.y);
+    ctx.lineTo(element.x, element.y);
     ctx.lineWidth = 5;
     ctx.stroke();
     ctx.closePath();
@@ -309,7 +345,7 @@ const CheckScore = () => {
                 DropRow();
             }
 
-            score += 1000;
+            score += 100;
             if(grid[ignoreList[0]].color == 'blue'){
                 blueScore += 2;
             } else {
@@ -451,7 +487,7 @@ const CheckScore = () => {
                 grid[z].y += SPACING_Y;
                 grid[z].visable = false;
             }
-            score += 1500;
+            score += 150;
             blueScore += 2;
             redScore++;
         }
