@@ -100,8 +100,9 @@ const DrawElement = (ctx, x, y, color) => {
     ctx.drawImage(svg, x, y);
 };
 
-const DrawText = (ctx, x, y, font, type, size, style, text) => {
+const DrawText = (ctx, x, y, font, type, size, style, textAlign, text) => {
     ctx.font = `${type} ${size}px ${font}`;
+    ctx.textAlign = textAlign;
     ctx.fillStyle = style;
     ctx.fillText(text, x, y, 140);
 }
@@ -180,13 +181,17 @@ const Draw = () => {
     ctx.clearRect(0,0,1920,1080);
     const img = new Image();
     img.src = "assets/bg.png";
+    
+    const SCOREBOX_X = 232;
+    const SCOREBOX_Y = 235;
+
     ctx.drawImage(img,0,0,1903,941);
     if(score == 0){
-        DrawText(ctx, 185, 235, 'Oxanium', 'normal', 40, 'white', '0000');
+        DrawText(ctx, SCOREBOX_X, SCOREBOX_Y, 'Oxanium', 'normal', 40, 'white', "center", '000');
     } else {
-        DrawText(ctx, 185, 235, 'Oxanium', 'normal', 40, 'white', score);
+        DrawText(ctx, SCOREBOX_X, SCOREBOX_Y, 'Oxanium', 'normal', 40, 'white', "center", score);
     }
-    DrawText(ctx, 1625, 95, 'Oxanium', 'bold', 40, 'white', timer);
+    DrawText(ctx, 1625, 95, 'Oxanium', 'bold', 40, 'white', "start", timer);
     Connect();
     for(var i = 0; i < grid.length; i++){
         // DrawOvalShape(ctx, grid[i].x, grid[i].y, RADIUS, grid[i].color);
