@@ -62,16 +62,6 @@ function getColor(input) {
     return array[Math.floor(Math.random() * array.length)];
 };
 
-
-// function to get circle x,y, and radius
-// function elem(x, y, radius, color, visable) {
-//     this.x = x;
-//     this.y = y;
-//     this.radius = radius;
-//     this.color = color;
-//     this.visable = visable;
-// }
-
 class elem{
     constructor(x, y, radius, color, visable){
         this.x = x;
@@ -100,12 +90,82 @@ const DrawElement = (ctx, x, y, color) => {
     ctx.drawImage(svg, x, y);
 };
 
+const DrawElementSize = (ctx, x, y, color, radius) => {
+    var svg = '';
+    if(color == 'red') svg = CARBON;
+    else if(color == 'blue') svg = OXYGEN;
+    else if (color == 'green') svg = NITROGEN;
+
+    ctx.drawImage(svg, x, y, radius, radius);
+};
+
 const DrawText = (ctx, x, y, font, type, size, style, textAlign, text) => {
     ctx.font = `${type} ${size}px ${font}`;
     ctx.textAlign = textAlign;
     ctx.fillStyle = style;
     ctx.fillText(text, x, y, 140);
 }
+
+const DrawTips = (ctx) => {
+    const blueOne = {x: 157.5, y: 500, color: 'blue', radius: 75};
+    const blueTwo = {x: 232.5, y: 500, color: 'blue', radius: 75};
+
+    ctx.beginPath();
+    ctx.strokeStyle = '#bd8aff';
+    ctx.moveTo(blueOne.x + 20, blueOne.y + 30);
+    ctx.lineTo(blueTwo.x + 20, blueTwo.y + 30);
+    ctx.moveTo(blueOne.x + 45, blueOne.y + 45);
+    ctx.lineTo(blueTwo.x + 45, blueTwo.y + 45);
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.closePath();
+
+    DrawElementSize(ctx, blueOne.x, blueOne.y, blueOne.color, blueOne.radius);
+    DrawElementSize(ctx, blueTwo.x, blueTwo.y, blueTwo.color, blueTwo.radius);
+    
+
+    const greenOne = {x: 157.5, y: 595, color: 'green', radius: 75};
+    const greenTwo = {x: 232.5, y: 595, color: 'green', radius: 75};
+
+    ctx.beginPath();
+    ctx.strokeStyle = '#bd8aff';
+    ctx.moveTo(greenOne.x + 20, greenOne.y + 25);
+    ctx.lineTo(greenTwo.x + 20, greenTwo.y + 25);
+    ctx.moveTo(greenOne.x + 45, greenOne.y + 37.5);
+    ctx.lineTo(greenTwo.x + 45, greenTwo.y + 37.5);
+    ctx.moveTo(greenOne.x + 45, greenOne.y + 50);
+    ctx.lineTo(greenTwo.x + 45, greenTwo.y + 50);
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.closePath();
+
+    DrawElementSize(ctx, greenOne.x, greenOne.y, greenOne.color, greenOne.radius);
+    DrawElementSize(ctx, greenTwo.x, greenTwo.y, greenTwo.color, greenTwo.radius);
+
+    const redOne = {x: 115, y: 690, color: 'blue', radius: 75};
+    const redTwo = {x: 190, y: 690, color: 'red', radius: 75};
+    const redThree = {x: 265, y: 690, color: 'blue', radius: 75};
+
+    ctx.beginPath();
+    ctx.strokeStyle = '#bd8aff';
+    ctx.moveTo(redOne.x + 20, redOne.y + 30);
+    ctx.lineTo(redTwo.x + 20, redTwo.y + 30);
+    ctx.moveTo(redOne.x + 45, redOne.y + 45);
+    ctx.lineTo(redTwo.x + 45, redTwo.y + 45);
+
+    ctx.moveTo(redTwo.x + 60, redTwo.y + 30);
+    ctx.lineTo(redThree.x + 60, redThree.y + 30);
+    ctx.moveTo(redTwo.x + 60, redTwo.y + 45);
+    ctx.lineTo(redThree.x + 60, redThree.y + 45);
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.closePath();
+
+
+    DrawElementSize(ctx, redOne.x, redOne.y, redOne.color, redOne.radius);
+    DrawElementSize(ctx, redTwo.x, redTwo.y, redTwo.color, redTwo.radius);
+    DrawElementSize(ctx, redThree.x, redThree.y, redThree.color, redThree.radius);
+};
 
 // function to draw rectangle
 
@@ -179,19 +239,31 @@ const Update = () => {
 
 const Draw = () => {
     ctx.clearRect(0,0,1920,1080);
+
     const img = new Image();
     img.src = "assets/bg.png";
+    ctx.drawImage(img,0,0,1903,941);
+
     
+    ctx.font = `${'lighter'} ${35}px ${'Oxanium'}`;
+    ctx.fillStyle = 'white';
+    ctx.fillText("OPERATION: ", 80, 90, 500);
+    ctx.font = `${'bold'} ${35}px ${'Oxanium'}`;
+    ctx.fillStyle = 'white';
+    ctx.fillText("AETHER", 295, 90, 500);
+
+
     const SCOREBOX_X = 232;
     const SCOREBOX_Y = 235;
-
-    ctx.drawImage(img,0,0,1903,941);
     if(score == 0){
         DrawText(ctx, SCOREBOX_X, SCOREBOX_Y, 'Oxanium', 'normal', 40, 'white', "center", '000');
     } else {
         DrawText(ctx, SCOREBOX_X, SCOREBOX_Y, 'Oxanium', 'normal', 40, 'white', "center", score);
     }
     DrawText(ctx, 1625, 95, 'Oxanium', 'bold', 40, 'white', "start", timer);
+
+    DrawTips(ctx);
+
     Connect();
     for(var i = 0; i < grid.length; i++){
         // DrawOvalShape(ctx, grid[i].x, grid[i].y, RADIUS, grid[i].color);
