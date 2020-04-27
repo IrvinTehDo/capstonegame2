@@ -19,9 +19,9 @@ const REDBAR = new Image();
 REDBAR.src = "assets/redbar.png";
 
 const START_X = 446;
-const START_Y = 162;
+const START_Y = 112;
 const SPACING_X = 110.67;
-const SPACING_Y = 95.67;
+const SPACING_Y = 104;
 const RADIUS = 35.8347;
 const ROWS = 6;
 const COLUMNS = 11;
