@@ -4,6 +4,8 @@ const ctx = c.getContext("2d");
 ctx.canvas.width = window.innerWidth;
 ctx.canvas.height = window.innerHeight;
 
+const SCALEW = 1903/941;
+
 const NITROGEN = new Image();
 NITROGEN.src = "assets/nitrogen.svg";
 const OXYGEN = new Image();
@@ -31,9 +33,11 @@ let blueScore = 0;
 let redScore = 0;
 let greenScore = 0;
 
+let gameover = false;
+
 var score = 0;
-var timer = '01:00';
-var time = 60;
+var timer = '00:45';
+var time = 45;
 var frame = 0;
 
 var lineSession = [];
@@ -228,6 +232,7 @@ const Update = () => {
         timer = `00:0${time}`;
     } else if (time <= 0){
         timer = `00:00`;
+        gameover = true;
     }
 
     for(var i = 0; i < movingElem.length; i++){
@@ -238,49 +243,59 @@ const Update = () => {
 // draw it
 
 const Draw = () => {
-    ctx.clearRect(0,0,1920,1080);
+    if(!gameover){
+        ctx.clearRect(0,0,1920,1080);
 
-    const img = new Image();
-    img.src = "assets/bg.png";
-    ctx.drawImage(img,0,0,1903,941);
+        const img = new Image();
+        img.src = "assets/bg.png";
+        //(width = 1903, height = 941)
+        ctx.drawImage(img,0,0,1903,941);
 
-    
-    ctx.font = `${'lighter'} ${35}px ${'Oxanium'}`;
-    ctx.fillStyle = 'white';
-    ctx.fillText("OPERATION: ", 80, 90, 500);
-    ctx.font = `${'bold'} ${35}px ${'Oxanium'}`;
-    ctx.fillStyle = 'white';
-    ctx.fillText("AETHER", 295, 90, 500);
+        
+        ctx.font = `${'lighter'} ${35}px ${'Oxanium'}`;
+        ctx.fillStyle = 'white';
+        ctx.fillText("OPERATION: ", 80, 90, 500);
+        ctx.font = `${'bold'} ${35}px ${'Oxanium'}`;
+        ctx.fillStyle = 'white';
+        ctx.fillText("AETHER", 295, 90, 500);
 
 
-    const SCOREBOX_X = 232;
-    const SCOREBOX_Y = 235;
-    if(score == 0){
-        DrawText(ctx, SCOREBOX_X, SCOREBOX_Y, 'Oxanium', 'normal', 40, 'white', "center", '000');
-    } else {
-        DrawText(ctx, SCOREBOX_X, SCOREBOX_Y, 'Oxanium', 'normal', 40, 'white', "center", score);
-    }
-    DrawText(ctx, 1625, 95, 'Oxanium', 'bold', 40, 'white', "start", timer);
-
-    DrawTips(ctx);
-
-    Connect();
-    for(var i = 0; i < grid.length; i++){
-        // DrawOvalShape(ctx, grid[i].x, grid[i].y, RADIUS, grid[i].color);
-        if(grid[i].visable){
-            DrawElement(ctx, grid[i].x - (RADIUS + RADIUS/2), grid[i].y - (RADIUS + RADIUS/2), grid[i].color);
+        const SCOREBOX_X = 232;
+        const SCOREBOX_Y = 235;
+        if(score == 0){
+            DrawText(ctx, SCOREBOX_X, SCOREBOX_Y, 'Oxanium', 'normal', 40, 'white', "center", '000');
+        } else {
+            DrawText(ctx, SCOREBOX_X, SCOREBOX_Y, 'Oxanium', 'normal', 40, 'white', "center", score);
         }
-    }
-    for(var i = 0; i < movingElem.length; i++){
-        if(movingElem[i].elem.visable){
-            DrawElement(ctx, movingElem[i].elem.x - (RADIUS + RADIUS/2), movingElem[i].elem.y - (RADIUS + RADIUS/2), movingElem[i].elem.color);
+        DrawText(ctx, 1625, 95, 'Oxanium', 'bold', 40, 'white', "start", timer);
+
+        DrawTips(ctx);
+
+        Connect();
+        for(var i = 0; i < grid.length; i++){
+            // DrawOvalShape(ctx, grid[i].x, grid[i].y, RADIUS, grid[i].color);
+            if(grid[i].visable){
+                DrawElement(ctx, grid[i].x - (RADIUS + RADIUS/2), grid[i].y - (RADIUS + RADIUS/2), grid[i].color);
+            }
         }
+        for(var i = 0; i < movingElem.length; i++){
+            if(movingElem[i].elem.visable){
+                DrawElement(ctx, movingElem[i].elem.x - (RADIUS + RADIUS/2), movingElem[i].elem.y - (RADIUS + RADIUS/2), movingElem[i].elem.color);
+            }
     }
 
-    // From 0 -> 175 width score*(maxWidth/scale)
-    ctx.drawImage(BLUEBAR, 170,336, blueScore*(175/100), 9);
-    ctx.drawImage(GREENBAR, 170,375, greenScore*(175/100), 10);
-    ctx.drawImage(REDBAR, 170,417, redScore*(175/100), 10);
+        // From 0 -> 175 width score*(maxWidth/scale)
+        ctx.drawImage(BLUEBAR, 170,336, blueScore*(175/50), 9);
+        ctx.drawImage(GREENBAR, 170,375, greenScore*(175/50), 10);
+        ctx.drawImage(REDBAR, 170,417, redScore*(175/50), 10);
+    }
+
+
+    if(gameover){
+        const bg = new Image();
+        bg.src = "assets/gameover.png";
+        ctx.drawImage(bg,0,0,1903,941);
+    }
 }
 
 const Connect = () => {
