@@ -6,6 +6,15 @@ ctx.canvas.height = window.innerHeight;
 
 const SCALEW = 1903/941;
 
+const ORIGWIDTH = 1903;
+const ORIGHEIGHT = 941;
+const SCREENWIDTH = window.innerWidth;
+const SCREENHEIGHT = window.innerHeight;
+
+const SCALEX = (SCREENWIDTH/ORIGWIDTH)
+const SCALEY = (SCREENHEIGHT/ORIGHEIGHT);
+
+
 const NITROGEN = new Image();
 NITROGEN.src = "assets/nitrogen.svg";
 const OXYGEN = new Image();
@@ -20,10 +29,10 @@ BLUEBAR.src = "assets/bluebar.png";
 const REDBAR = new Image();
 REDBAR.src = "assets/redbar.png";
 
-const START_X = 440;
-const START_Y = 112;
-const SPACING_X = 112;
-const SPACING_Y = 104;
+const START_X = 440 * SCALEX;
+const START_Y = 112 * SCALEY;
+const SPACING_X = 112 * SCALEX;
+const SPACING_Y = 104 * SCALEY;
 const RADIUS = 35.8347;
 const ROWS = 6;
 const COLUMNS = 11;
@@ -111,8 +120,8 @@ const DrawText = (ctx, x, y, font, type, size, style, textAlign, text) => {
 }
 
 const DrawTips = (ctx) => {
-    const blueOne = {x: 157.5, y: 500, color: 'blue', radius: 75};
-    const blueTwo = {x: 232.5, y: 500, color: 'blue', radius: 75};
+    const blueOne = {x: 157.5 * SCALEX, y: 500 * SCALEY, color: 'blue', radius: 75};
+    const blueTwo = {x: 232.5 * SCALEX, y: 500 * SCALEY, color: 'blue', radius: 75};
 
     ctx.beginPath();
     ctx.strokeStyle = '#bd8aff';
@@ -128,8 +137,8 @@ const DrawTips = (ctx) => {
     DrawElementSize(ctx, blueTwo.x, blueTwo.y, blueTwo.color, blueTwo.radius);
     
 
-    const greenOne = {x: 157.5, y: 595, color: 'green', radius: 75};
-    const greenTwo = {x: 232.5, y: 595, color: 'green', radius: 75};
+    const greenOne = {x: 157.5 * SCALEX, y: 595 * SCALEY, color: 'green', radius: 75};
+    const greenTwo = {x: 232.5 * SCALEX, y: 595 * SCALEY, color: 'green', radius: 75};
 
     ctx.beginPath();
     ctx.strokeStyle = '#bd8aff';
@@ -146,9 +155,9 @@ const DrawTips = (ctx) => {
     DrawElementSize(ctx, greenOne.x, greenOne.y, greenOne.color, greenOne.radius);
     DrawElementSize(ctx, greenTwo.x, greenTwo.y, greenTwo.color, greenTwo.radius);
 
-    const redOne = {x: 115, y: 690, color: 'blue', radius: 75};
-    const redTwo = {x: 190, y: 690, color: 'red', radius: 75};
-    const redThree = {x: 265, y: 690, color: 'blue', radius: 75};
+    const redOne = {x: 115 * SCALEX, y: 690 * SCALEY, color: 'blue', radius: 75};
+    const redTwo = {x: 190 * SCALEX, y: 690 * SCALEY, color: 'red', radius: 75};
+    const redThree = {x: 265 * SCALEX, y: 690 * SCALEY, color: 'blue', radius: 75};
 
     ctx.beginPath();
     ctx.strokeStyle = '#bd8aff';
@@ -249,7 +258,7 @@ const Draw = () => {
         const img = new Image();
         img.src = "assets/bg.png";
         //(width = 1903, height = 941)
-        ctx.drawImage(img,0,0,1903,941);
+        ctx.drawImage(img,0,0,1903 * SCALEX,941 * SCALEY);
 
         
         ctx.font = `${'lighter'} ${35}px ${'Oxanium'}`;
@@ -260,14 +269,14 @@ const Draw = () => {
         ctx.fillText("AETHER", 295, 90, 500);
 
 
-        const SCOREBOX_X = 232;
-        const SCOREBOX_Y = 235;
+        const SCOREBOX_X = 232 * SCALEX;
+        const SCOREBOX_Y = 235 * SCALEY;
         if(score == 0){
             DrawText(ctx, SCOREBOX_X, SCOREBOX_Y, 'Oxanium', 'normal', 40, 'white', "center", '000');
         } else {
             DrawText(ctx, SCOREBOX_X, SCOREBOX_Y, 'Oxanium', 'normal', 40, 'white', "center", score);
         }
-        DrawText(ctx, 1625, 95, 'Oxanium', 'bold', 40, 'white', "start", timer);
+        DrawText(ctx, 1625 * SCALEX, 95 * SCALEY, 'Oxanium', 'bold', 40, 'white', "start", timer);
 
         DrawTips(ctx);
 
@@ -285,16 +294,16 @@ const Draw = () => {
     }
 
         // From 0 -> 175 width score*(maxWidth/scale)
-        ctx.drawImage(BLUEBAR, 170,336, blueScore*(175/50), 9);
-        ctx.drawImage(GREENBAR, 170,375, greenScore*(175/50), 10);
-        ctx.drawImage(REDBAR, 170,417, redScore*(175/50), 10);
+        ctx.drawImage(BLUEBAR, 170 * SCALEX,336 * SCALEY, blueScore*(175/50), 9);
+        ctx.drawImage(GREENBAR, 170 * SCALEX,375 * SCALEY, greenScore*(175/50), 10);
+        ctx.drawImage(REDBAR, 170 * SCALEX,417 * SCALEY, redScore*(175/50), 10);
     }
 
 
     if(gameover){
         const bg = new Image();
         bg.src = "assets/gameover.png";
-        ctx.drawImage(bg,0,0,1903,941);
+        ctx.drawImage(bg,0,0,1903 * SCALEX,941 * SCALEY);
     }
 }
 
