@@ -29,11 +29,16 @@ BLUEBAR.src = "assets/bluebar.png";
 const REDBAR = new Image();
 REDBAR.src = "assets/redbar.png";
 
-const START_X = 440 * SCALEX;
-const START_Y = 112 * SCALEY;
+const START_X = 325 * SCALEX;
+const START_Y = 62 * SCALEY;
 const SPACING_X = 112 * SCALEX;
 const SPACING_Y = 104 * SCALEY;
-const RADIUS = 35.8347;
+// let RADIUS = 35.8347;
+let RADIUS = 113;
+if(SCREENWIDTH <= 1500){
+    RADIUS = 75;
+}
+
 const ROWS = 6;
 const COLUMNS = 11;
 const grid = [];
@@ -100,7 +105,8 @@ const DrawElement = (ctx, x, y, color) => {
     else if(color == 'blue') svg = OXYGEN;
     else if (color == 'green') svg = NITROGEN;
 
-    ctx.drawImage(svg, x, y);
+    // ctx.drawImage(svg, x, y, RADIUS, RADIUS);
+    ctx.drawImage(svg, x, y, RADIUS, RADIUS)
 };
 
 const DrawElementSize = (ctx, x, y, color, radius) => {
@@ -280,16 +286,24 @@ const Draw = () => {
 
         DrawTips(ctx);
 
+        // Debug squares
+        // for(var i = 0; i < grid.length; i++){
+        //     // DrawOvalShape(ctx, grid[i].x, grid[i].y, RADIUS, grid[i].color);
+        //     if(grid[i].visable){
+        //         drawRect(ctx, grid[i].x, grid[i].y, RADIUS, RADIUS, grid[i].color);
+        //     }
+        // }
+
         Connect();
         for(var i = 0; i < grid.length; i++){
             // DrawOvalShape(ctx, grid[i].x, grid[i].y, RADIUS, grid[i].color);
             if(grid[i].visable){
-                DrawElement(ctx, grid[i].x - (RADIUS + RADIUS/2), grid[i].y - (RADIUS + RADIUS/2), grid[i].color);
+                DrawElement(ctx, grid[i].x, grid[i].y , grid[i].color);
             }
         }
         for(var i = 0; i < movingElem.length; i++){
             if(movingElem[i].elem.visable){
-                DrawElement(ctx, movingElem[i].elem.x - (RADIUS + RADIUS/2), movingElem[i].elem.y - (RADIUS + RADIUS/2), movingElem[i].elem.color);
+                DrawElement(ctx, movingElem[i].elem.x, movingElem[i].elem.y, movingElem[i].elem.color);
             }
     }
         // From 0 -> 175 width score*(maxWidth/scale)
@@ -361,10 +375,10 @@ function drawLine (previous, element, color) {
 
     ctx.beginPath();
     ctx.strokeStyle = color;
-    ctx.moveTo(previous.x- 10, previous.y - 10);
-    ctx.lineTo(element.x- 10, element.y - 10);
-    ctx.moveTo(previous.x + 10, previous.y + 10);
-    ctx.lineTo(element.x + 10, element.y + 10);
+    ctx.moveTo(previous.x + RADIUS/2 - 10, previous.y + RADIUS/2 - 10);
+    ctx.lineTo(element.x + RADIUS/2 - 10, element.y + RADIUS/2 - 10);
+    ctx.moveTo(previous.x + RADIUS/2 + 10, previous.y + RADIUS/2 + 10);
+    ctx.lineTo(element.x + RADIUS/2 + 10, element.y + RADIUS/2 + 10);
     ctx.lineWidth = 5;
     ctx.stroke();
     ctx.closePath();
@@ -375,12 +389,12 @@ const drawTripleLine = (previous, element, color) => {
 
     ctx.beginPath();
     ctx.strokeStyle = color;
-    ctx.moveTo(previous.x- 20, previous.y - 20);
-    ctx.lineTo(element.x- 20, element.y - 20);
-    ctx.moveTo(previous.x + 20, previous.y + 20);
-    ctx.lineTo(element.x + 20, element.y + 20);
-    ctx.moveTo(previous.x, previous.y);
-    ctx.lineTo(element.x, element.y);
+    ctx.moveTo(previous.x + RADIUS/2 - 20, previous.y + RADIUS/2 - 20);
+    ctx.lineTo(element.x + RADIUS/2 - 20, element.y + RADIUS/2 - 20);
+    ctx.moveTo(previous.x + RADIUS/2 + 20, previous.y + RADIUS/2 + 20);
+    ctx.lineTo(element.x + RADIUS/2 + 20, element.y + RADIUS/2 + 20);
+    ctx.moveTo(previous.x + RADIUS/2, previous.y + RADIUS/2);
+    ctx.lineTo(element.x + RADIUS/2, element.y + RADIUS/2);
     ctx.lineWidth = 5;
     ctx.stroke();
     ctx.closePath();
