@@ -229,7 +229,7 @@ class MovingElem {
 
     update = () => {
         if(this.elem.y < this.moveToY){
-            this.elem.y += 10;
+            this.elem.y += 15;
         } else if(this.elem.y >= this.moveToY){
             // make element at elemNum visable
             // delete this elem
