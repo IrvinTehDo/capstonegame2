@@ -504,8 +504,7 @@ const CheckScore = () => {
             }
 
             score += 100;
-            console.log(grid[ignoreList[0]].color);
-            if(grid[ignoreList[0]].color == 'blue'){
+            if(lineSession[0].color == 'blue'){
                 blueScore += 2;
             } else {
                 greenScore += 2;
