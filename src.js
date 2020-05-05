@@ -63,6 +63,8 @@ const circleColors = {
 var selected = null;
 var mouseDown = false;
 
+let mouseHoverRestart = false;
+
 const movingElem = [];
 
 // function for weighted colors
@@ -352,7 +354,13 @@ const Draw = () => {
 
         const restartButton = new Image();
         restartButton.src = "assets/restartbutton.svg";
-        ctx.drawImage(restartButton, 777 *SCALEX, 610*SCALEY, 350*SCALEX, 106*SCALEY);
+        if(mouseHoverRestart){
+            ctx.globalAlpha = 0.5;
+            ctx.drawImage(restartButton, 777 *SCALEX, 610*SCALEY, 350*SCALEX, 106*SCALEY, );
+            ctx.globalAlpha = 1;
+        } else {
+            ctx.drawImage(restartButton, 777 *SCALEX, 610*SCALEY, 350*SCALEX, 106*SCALEY);
+        }
     }
 }
 
@@ -655,8 +663,28 @@ c.addEventListener('mousedown', function (e){
     Connect(e);
 });
 
-c.addEventListener('mouseup', function (e){
-    CheckScore();
+const Restart = () => {
+    gameover = false;
+    score = 0;
+    time = 45;
+    blueScore = 0;
+    redScore = 0;
+    greenScore = 0;
+    timer = '00:45';
+    frame = 0;
+};
+
+c.addEventListener('mouseup', function (e){ 
+    if(gameover){
+    const mouse = {x: e.clientX, y: e.clientY};
+    const box = {x:777 *SCALEX, y:610*SCALEY, width:350*SCALEX, height:106*SCALEY};
+        if(MouseInBox(box, mouse)){
+            Restart();
+        }
+    } else {
+        CheckScore();
+    }
+
     mouseDown = false;
     lineSession = [];
     ignoreList = [];
@@ -667,19 +695,22 @@ const MouseInCircle = (circle, mouse) => {
 };
 
 const MouseInBox = (box, mouse) => {
-    return 
+    return (box.x <= mouse.x && box.x + box.width >= mouse.x && box.y <= mouse.y && box.y + box.height >= mouse.y);
 }
 
 
 c.addEventListener('mousemove', function (e){
-
+    const mouse = {x: e.clientX, y: e.clientY};
+    const box = {x:777 *SCALEX, y:610*SCALEY, width:350*SCALEX, height:106*SCALEY};
     if(gameover){
-
+        if(MouseInBox(box, mouse)){
+            mouseHoverRestart = true;
+        } else {
+            mouseHoverRestart = false;
+        }
     }
 
     if(mouseDown){
-        const mouse = {x: e.clientX, y: e.clientY};
-
         // Limit selectable dots to 3
         if(ignoreList.length >= 2 && grid[ignoreList[ignoreList.length-1]].color != 'red'){ 
             return;
