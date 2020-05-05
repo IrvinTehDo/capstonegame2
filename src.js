@@ -322,23 +322,23 @@ const Draw = () => {
         // From 0 -> 175 width score*(maxWidth/scale)
         const blueMax = 30;
         if(blueScore < blueMax){
-            ctx.drawImage(BLUEBAR, 170 * SCALEX,336 * SCALEY, blueScore*(180/blueMax), 9);
+            ctx.drawImage(BLUEBAR, 170 * SCALEX,336 * SCALEY, blueScore*(180/blueMax) * SCALEX, 9);
         } else {
-            ctx.drawImage(BLUEBAR, 170 * SCALEX,336 * SCALEY, blueMax*(180/blueMax), 9);
+            ctx.drawImage(BLUEBAR, 170 * SCALEX,336 * SCALEY, blueMax*(180/blueMax) * SCALEX, 9);
         }
 
         const greenMax = 30;
         if(greenScore < greenMax){
-            ctx.drawImage(GREENBAR, 170 * SCALEX,375 * SCALEY, greenScore*(180/greenMax), 10);
+            ctx.drawImage(GREENBAR, 170 * SCALEX,375 * SCALEY, greenScore*(180/greenMax) * SCALEX, 10);
         } else {
-            ctx.drawImage(GREENBAR, 170 * SCALEX,375 * SCALEY, greenMax*(180/greenMax), 10);
+            ctx.drawImage(GREENBAR, 170 * SCALEX,375 * SCALEY, greenMax*(180/greenMax) * SCALEX, 10);
         }
 
-        const redMax = 15;
+        const redMax = 10;
         if(redScore < redMax){
-            ctx.drawImage(REDBAR, 170 * SCALEX,417 * SCALEY, redScore*(180/redMax), 10);
+            ctx.drawImage(REDBAR, 170 * SCALEX,417 * SCALEY, redScore*(180/redMax) * SCALEX, 10);
         } else {
-            ctx.drawImage(REDBAR, 170 * SCALEX,417 * SCALEY, redMax*(180/redMax), 10);
+            ctx.drawImage(REDBAR, 170 * SCALEX,417 * SCALEY, redMax*(180/redMax) * SCALEX, 10);
         }
     }
 
@@ -666,8 +666,17 @@ const MouseInCircle = (circle, mouse) => {
     return Math.sqrt((circle.x - mouse.x)*(circle.x - mouse.x) + (circle.y - mouse.y) * (circle.y - mouse.y)) < circle.radius;
 };
 
+const MouseInBox = (box, mouse) => {
+    return 
+}
+
 
 c.addEventListener('mousemove', function (e){
+
+    if(gameover){
+
+    }
+
     if(mouseDown){
         const mouse = {x: e.clientX, y: e.clientY};
 
