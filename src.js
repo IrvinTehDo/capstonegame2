@@ -33,10 +33,9 @@ const START_X = 325 * SCALEX;
 const START_Y = 62 * SCALEY;
 const SPACING_X = 112 * SCALEX;
 const SPACING_Y = 104 * SCALEY;
-// let RADIUS = 35.8347;
 let RADIUS = 113;
 if(SCREENWIDTH <= 1500){
-    RADIUS = 75;
+    RADIUS = 90;
 }
 
 const ROWS = 6;
@@ -126,15 +125,29 @@ const DrawText = (ctx, x, y, font, type, size, style, textAlign, text) => {
 }
 
 const DrawTips = (ctx) => {
-    const blueOne = {x: 157.5 * SCALEX, y: 500 * SCALEY, color: 'blue', radius: 75};
-    const blueTwo = {x: 232.5 * SCALEX, y: 500 * SCALEY, color: 'blue', radius: 75};
+    //Screen size mod
+    let sizeModX = 0;
+    let sizeModY = 0;
+    let radius = 75;
+
+    let lineToSpacingMod = 0;
+
+    if(SCREENWIDTH < 1500) {
+        sizeModX = -2;
+        radius = 55;
+        lineToSpacingMod = 9;
+    }
+
+
+    const blueOne = {x: 157.5 * SCALEX - sizeModX, y: 500 * SCALEY - sizeModY, color: 'blue', radius: radius};
+    const blueTwo = {x: 232.5 * SCALEX - sizeModX, y: 500 * SCALEY - sizeModY, color: 'blue', radius: radius};
 
     ctx.beginPath();
     ctx.strokeStyle = '#bd8aff';
-    ctx.moveTo(blueOne.x + 20, blueOne.y + 30);
-    ctx.lineTo(blueTwo.x + 20, blueTwo.y + 30);
-    ctx.moveTo(blueOne.x + 45, blueOne.y + 45);
-    ctx.lineTo(blueTwo.x + 45, blueTwo.y + 45);
+    ctx.moveTo(blueOne.x + 20 - lineToSpacingMod, blueOne.y + 30 - lineToSpacingMod);
+    ctx.lineTo(blueTwo.x + 20 - lineToSpacingMod, blueTwo.y + 30 - lineToSpacingMod);
+    ctx.moveTo(blueOne.x + 45 - lineToSpacingMod, blueOne.y + 45 - lineToSpacingMod);
+    ctx.lineTo(blueTwo.x + 45 - lineToSpacingMod, blueTwo.y + 45 - lineToSpacingMod);
     ctx.lineWidth = 2;
     ctx.stroke();
     ctx.closePath();
@@ -143,17 +156,17 @@ const DrawTips = (ctx) => {
     DrawElementSize(ctx, blueTwo.x, blueTwo.y, blueTwo.color, blueTwo.radius);
     
 
-    const greenOne = {x: 157.5 * SCALEX, y: 595 * SCALEY, color: 'green', radius: 75};
-    const greenTwo = {x: 232.5 * SCALEX, y: 595 * SCALEY, color: 'green', radius: 75};
+    const greenOne = {x: 157.5 * SCALEX - sizeModX, y: 595 * SCALEY - sizeModY, color: 'green', radius: radius};
+    const greenTwo = {x: 232.5 * SCALEX - sizeModX, y: 595 * SCALEY - sizeModY, color: 'green', radius: radius};
 
     ctx.beginPath();
     ctx.strokeStyle = '#bd8aff';
-    ctx.moveTo(greenOne.x + 20, greenOne.y + 25);
-    ctx.lineTo(greenTwo.x + 20, greenTwo.y + 25);
-    ctx.moveTo(greenOne.x + 45, greenOne.y + 37.5);
-    ctx.lineTo(greenTwo.x + 45, greenTwo.y + 37.5);
-    ctx.moveTo(greenOne.x + 45, greenOne.y + 50);
-    ctx.lineTo(greenTwo.x + 45, greenTwo.y + 50);
+    ctx.moveTo(greenOne.x + 30 - lineToSpacingMod, greenOne.y + 25 - lineToSpacingMod);
+    ctx.lineTo(greenTwo.x + 30 - lineToSpacingMod, greenTwo.y + 25 - lineToSpacingMod);
+    ctx.moveTo(greenOne.x + 45 - lineToSpacingMod, greenOne.y + 37.5 - lineToSpacingMod);
+    ctx.lineTo(greenTwo.x + 45 - lineToSpacingMod, greenTwo.y + 37.5 - lineToSpacingMod);
+    ctx.moveTo(greenOne.x + 45 - lineToSpacingMod, greenOne.y + 50 - lineToSpacingMod);
+    ctx.lineTo(greenTwo.x + 45 - lineToSpacingMod, greenTwo.y + 50 - lineToSpacingMod);
     ctx.lineWidth = 2;
     ctx.stroke();
     ctx.closePath();
@@ -161,21 +174,21 @@ const DrawTips = (ctx) => {
     DrawElementSize(ctx, greenOne.x, greenOne.y, greenOne.color, greenOne.radius);
     DrawElementSize(ctx, greenTwo.x, greenTwo.y, greenTwo.color, greenTwo.radius);
 
-    const redOne = {x: 115 * SCALEX, y: 690 * SCALEY, color: 'blue', radius: 75};
-    const redTwo = {x: 190 * SCALEX, y: 690 * SCALEY, color: 'red', radius: 75};
-    const redThree = {x: 265 * SCALEX, y: 690 * SCALEY, color: 'blue', radius: 75};
+    const redOne = {x: 115 * SCALEX - sizeModX, y: 690 * SCALEY - sizeModY, color: 'blue', radius: radius};
+    const redTwo = {x: 190 * SCALEX - sizeModX, y: 690 * SCALEY - sizeModY, color: 'red', radius: radius};
+    const redThree = {x: 265 * SCALEX - sizeModX, y: 690 * SCALEY - sizeModY, color: 'blue', radius: radius};
 
     ctx.beginPath();
     ctx.strokeStyle = '#bd8aff';
-    ctx.moveTo(redOne.x + 20, redOne.y + 30);
-    ctx.lineTo(redTwo.x + 20, redTwo.y + 30);
-    ctx.moveTo(redOne.x + 45, redOne.y + 45);
-    ctx.lineTo(redTwo.x + 45, redTwo.y + 45);
+    ctx.moveTo(redOne.x + 20 - lineToSpacingMod, redOne.y + 30 - lineToSpacingMod);
+    ctx.lineTo(redTwo.x + 20 - lineToSpacingMod, redTwo.y + 30 - lineToSpacingMod);
+    ctx.moveTo(redOne.x + 45 - lineToSpacingMod, redOne.y + 45 - lineToSpacingMod);
+    ctx.lineTo(redTwo.x + 45 - lineToSpacingMod, redTwo.y + 45 - lineToSpacingMod);
 
-    ctx.moveTo(redTwo.x + 60, redTwo.y + 30);
-    ctx.lineTo(redThree.x + 60, redThree.y + 30);
-    ctx.moveTo(redTwo.x + 60, redTwo.y + 45);
-    ctx.lineTo(redThree.x + 60, redThree.y + 45);
+    ctx.moveTo(redTwo.x + 50 - lineToSpacingMod, redTwo.y + 30 - lineToSpacingMod);
+    ctx.lineTo(redThree.x + 50 - lineToSpacingMod, redThree.y + 30 - lineToSpacingMod);
+    ctx.moveTo(redTwo.x + 50 - lineToSpacingMod, redTwo.y + 45 - lineToSpacingMod);
+    ctx.lineTo(redThree.x + 50 - lineToSpacingMod, redThree.y + 45 - lineToSpacingMod);
     ctx.lineWidth = 2;
     ctx.stroke();
     ctx.closePath();
@@ -334,6 +347,12 @@ const Draw = () => {
         const bg = new Image();
         bg.src = "assets/gameover.png";
         ctx.drawImage(bg,0,0,1903 * SCALEX,941 * SCALEY);
+
+        DrawText(ctx, 950 *SCALEX, 570 *SCALEY, 'Orbitron', 'normal', 25, 'white', "center", `Your score : ${score}`);
+
+        const restartButton = new Image();
+        restartButton.src = "assets/restartbutton.svg";
+        ctx.drawImage(restartButton, 777 *SCALEX, 610*SCALEY, 350*SCALEX, 106*SCALEY);
     }
 }
 
